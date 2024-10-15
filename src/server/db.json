@@ -1,0 +1,32 @@
+{
+  "tasks": [
+    {
+      "id": "7ce8",
+      "name": "Auth Guard Task",
+      "status": "PENDING",
+      "created_by": "121"
+    },
+    {
+      "id": "3bdf",
+      "name": "Role Guard Task",
+      "status": "PENDING",
+      "created_by": "111"
+    }
+  ],
+  "users": [
+    {
+      "id": "111",
+      "email": "admin@gmail.com",
+      "password": "pass1234",
+      "name": "Vikram Kaleeswaran",
+      "role": "ADMIN"
+    },
+    {
+      "id": "121",
+      "email": "vkalees64@gmail.com",
+      "password": "64646464",
+      "name": "Vikram Kaleeswaran",
+      "role": "USER"
+    }
+  ]
+}

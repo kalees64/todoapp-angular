@@ -1,0 +1,13 @@
+<main class="p-2">
+  @if(task){
+  <h2>Your Task</h2>
+  <p>
+    Name : <b>{{ task.name }}</b>
+  </p>
+  <p>
+    Status : <b>{{ task.status }}</b>
+  </p>
+  } @else {
+  <p>Loading...</p>
+  }
+</main>

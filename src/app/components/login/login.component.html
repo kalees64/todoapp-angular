@@ -1,0 +1,46 @@
+<main class="p-2 row">
+  <form
+    [formGroup]="formData"
+    (ngSubmit)="onSubmit()"
+    class="col-11 col-md-6 mx-auto"
+  >
+    <h2>Login</h2>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control {{
+          email.errors && email.touched ? 'is-invalid' : ''
+        }} {{ email.valid ? 'is-valid' : '' }}"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        formControlName="email"
+      />
+      <span class="text-danger" *ngIf="email.errors && email.touched"
+        >Please enter valid email</span
+      >
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control {{
+          password.errors && password.touched
+            ? 'is-invalid'
+            : password.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        id="exampleInputPassword1"
+        formControlName="password"
+      />
+      <span class="text-danger" *ngIf="password.errors && password.touched"
+        >Password length is 8 to 16 letters</span
+      >
+    </div>
+
+    <button type="submit" [disabled]="formData.invalid" class="btn btn-primary">
+      Login
+    </button>
+  </form>
+</main>

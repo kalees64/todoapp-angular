@@ -1,0 +1,58 @@
+<main class="p-2">
+  <h2>All Tasks @if(tasks){({{ tasks.length }})}</h2>
+
+  <div>
+    <a routerLink="/tasks/create" class="btn btn-primary">Create Task</a>
+  </div>
+
+  <div class="pt-2">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Sno</th>
+          <th>Task Name</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(tasks){ @for(task of tasks; track task.id; let i = $index){
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.status }}</td>
+          <td>
+            <a routerLink="/tasks/view/{{ task.id }}" class="btn btn-secondary"
+              >View</a
+            >
+            &nbsp;
+            <a routerLink="/tasks/edit/{{ task.id }}" class="btn btn-info"
+              >Edit</a
+            >
+            &nbsp; @if(task.status === 'PENDING'){
+            <button
+              type="button"
+              class="btn btn-success"
+              (click)="completeTask(task.id, task)"
+            >
+              Mark as completed
+            </button>
+            &nbsp; }
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="deleteTask(task.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        } } @else {
+        <tr>
+          <td colspan="4">No Data</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</main>

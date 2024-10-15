@@ -1,0 +1,62 @@
+<main class="p-2 row">
+  <form
+    method="post"
+    class="col-12 col-md-6 mx-auto"
+    [formGroup]="updateForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <h2>Update Task</h2>
+
+    <div>
+      <label for="taskName" class="form-label">Task Name</label>
+      <input
+        type="text"
+        name="taskName"
+        id="taskName"
+        class="form-control {{
+          name.errors && name.touched
+            ? 'is-invalid'
+            : name.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        formControlName="name"
+      />
+      @if(name.errors && name.touched){
+      <span class="text-danger">Task name must contains atleast 3 letters</span>
+      }
+    </div>
+
+    <div>
+      <label for="taskStatus" class="form-label">Status</label>
+      <select
+        name="taskStatus"
+        id="taskStatus"
+        class="form-control {{
+          status.errors && status.touched
+            ? 'is-invalid'
+            : status.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        formControlName="status"
+      >
+        <option disabled>---SELECT---</option>
+        <option value="PENDING">PENDING</option>
+        <option value="COMPLETED">COMPLETED</option>
+      </select>
+      @if(status.errors && status.touched){
+      <span class="text-danger">Please select the status of the task</span>
+      }
+    </div>
+    <div class="pt-2 d-flex justify-content-center">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="updateForm.invalid"
+      >
+        Update Task
+      </button>
+    </div>
+  </form>
+</main>
