@@ -1,14 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { I_ADD_TASK, I_UPDATE_TASK } from '../utils/objects';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.serverURL = environment.API_URL;
+  }
 
-  serverURL = 'https://cms.krudraksha.com/items';
+  serverURL: string;
 
   getTasks() {
     const url = `${this.serverURL}/tasks`;

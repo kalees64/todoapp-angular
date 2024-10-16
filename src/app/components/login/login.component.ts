@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../sevices/user.service';
 import { Router, RouterLink } from '@angular/router';
+import { I_USER } from '../../utils/objects';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -20,15 +22,40 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toast: ToastrService
   ) {}
 
   formData!: FormGroup;
 
   onSubmit() {
-    this.userService.login(
-      this.formData.value.email,
-      this.formData.value.password
+    this.userService.getAllUsers().subscribe(
+      (res: any) => {
+        console.log(res.data);
+        const user: I_USER = res.data.find(
+          (val: I_USER) =>
+            val.email === this.formData.value.email &&
+            val.password === this.formData.value.password
+        );
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.toast.success('Login Success');
+          if (user.role === 'ADMIN') {
+            this.userService.isAdminLoggedIn = true;
+            this.userService.isLoggedIn = true;
+            this.router.navigateByUrl('/tasks/all');
+          } else {
+            this.userService.isLoggedIn = true;
+            this.router.navigateByUrl('/tasks');
+          }
+        } else {
+          this.toast.error('Invalid email & password');
+        }
+      },
+      (error: Error) => {
+        console.log(error);
+        this.toast.error(error.message);
+      }
     );
   }
 

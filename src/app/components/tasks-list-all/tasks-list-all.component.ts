@@ -3,11 +3,13 @@ import { I_TASK } from '../../utils/objects';
 import { TaskService } from '../../sevices/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
 
 @Component({
   selector: 'app-tasks-list-all',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DataTablesModule],
   templateUrl: './tasks-list-all.component.html',
   styles: ``,
 })
@@ -15,6 +17,8 @@ export class TasksListAllComponent implements OnInit {
   constructor(private taskService: TaskService, private toast: ToastrService) {}
 
   tasks!: I_TASK[];
+
+  dtOptions: Config = {};
 
   fetchTasks() {
     this.taskService.getTasks().subscribe(
@@ -61,5 +65,11 @@ export class TasksListAllComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+    };
   }
 }

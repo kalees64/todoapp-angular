@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../sevices/user.service';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
 
 @Component({
   selector: 'app-tasks-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DataTablesModule],
   templateUrl: './tasks-list.component.html',
   styles: ``,
 })
@@ -21,6 +23,8 @@ export class TasksListComponent {
   ) {}
 
   tasks!: I_TASK[];
+
+  dtOptions: Config = {};
 
   fetchTasks() {
     const userId = this.userService.getUserIdFromLocalStorage();
@@ -70,5 +74,11 @@ export class TasksListComponent {
 
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+    };
   }
 }

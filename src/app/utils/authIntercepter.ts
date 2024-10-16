@@ -1,7 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authToken = 'p37iWUcP3vHLlqQaoBArAhDtH-7XLzhi';
+  const authToken = environment.token;
   const authReq = req.clone({
     headers: req.headers.set('Authorization', `Bearer ${authToken}`),
   });

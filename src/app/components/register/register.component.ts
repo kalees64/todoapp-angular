@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
         console.log(res.data);
         if (res.data.id) {
           this.toast.success('Register successful');
-          this.userService.login(res.data.email, res.data.password);
+          this.router.navigateByUrl('/login');
         } else {
           this.toast.error('Register failed');
         }
