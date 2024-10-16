@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
+import { BadgeComponent } from '../ui/badge/badge.component';
 
 @Component({
   selector: 'app-tasks-list-all',
   standalone: true,
-  imports: [RouterLink, DataTablesModule],
+  imports: [RouterLink, DataTablesModule, BadgeComponent],
   templateUrl: './tasks-list-all.component.html',
   styles: ``,
 })

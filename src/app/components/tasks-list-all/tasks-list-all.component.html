@@ -25,7 +25,18 @@
         <tr>
           <td>{{ i + 1 }}</td>
           <td>{{ task.name }}</td>
-          <td>{{ task.status }}</td>
+          <td>
+            <app-badge
+              color="success"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'COMPLETED'"
+            ></app-badge>
+            <app-badge
+              color="danger"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'PENDING'"
+            ></app-badge>
+          </td>
           <td>
             <a routerLink="/tasks/view/{{ task.id }}" class="btn btn-secondary"
               >View</a

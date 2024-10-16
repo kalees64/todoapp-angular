@@ -9,12 +9,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { UserService } from '../../sevices/user.service';
-import { I_TASK } from '../../utils/objects';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-tasks-create',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, QuillModule],
   templateUrl: './tasks-create.component.html',
   styles: ``,
 })
@@ -28,6 +28,16 @@ export class TasksCreateComponent implements OnInit {
   ) {}
 
   addForm!: FormGroup;
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'], // toggled buttons
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ header: [1, 2, 3, false] }],
+      [{ align: [] }],
+      ['link', 'image'],
+    ],
+  };
 
   onSubmit() {
     const userId = this.userService.getUserIdFromLocalStorage();
