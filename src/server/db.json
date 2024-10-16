@@ -7,9 +7,9 @@
       "created_by": "121"
     },
     {
-      "id": "3bdf",
-      "name": "Role Guard Task",
-      "status": "PENDING",
+      "id": "7aec",
+      "name": "Register form task",
+      "status": "COMPLETED",
       "created_by": "111"
     }
   ],
@@ -17,15 +17,29 @@
     {
       "id": "111",
       "email": "admin@gmail.com",
-      "password": "pass1234",
+      "password": "Pass@1234",
       "name": "Vikram Kaleeswaran",
       "role": "ADMIN"
     },
     {
       "id": "121",
       "email": "vkalees64@gmail.com",
-      "password": "64646464",
+      "password": "Vairamages@64",
       "name": "Vikram Kaleeswaran",
+      "role": "USER"
+    },
+    {
+      "id": "b467",
+      "name": "Ram",
+      "email": "ram@gmail.com",
+      "password": "Vairamages@64",
+      "role": "USER"
+    },
+    {
+      "id": "8bbc",
+      "name": "Arun",
+      "email": "arun@gmail.com",
+      "password": "Vairamages@64",
       "role": "USER"
     }
   ]

@@ -1,0 +1,101 @@
+<main class="p-2 row">
+  <form
+    class="col-11 col-md-4 mx-auto"
+    [formGroup]="regForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <h2>Register</h2>
+    <div class="mb-3">
+      <label for="userName" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control {{
+          name.errors && name.touched
+            ? 'is-invalid'
+            : name.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        id="userName"
+        aria-describedby="userName"
+        formControlName="name"
+      />
+      @if(name.errors && name.touched){
+      <span class="text-danger"> name must contains atleast 3 characters </span>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control {{
+          email.errors && email.touched
+            ? 'is-invalid'
+            : email.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        formControlName="email"
+      />
+      @if(email.errors && email.touched){
+      <span class="text-danger"> please enter valid email </span>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control {{
+          password.errors && password.touched
+            ? 'is-invalid'
+            : password.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        id="exampleInputPassword1"
+        formControlName="password"
+      />
+      @if(password.errors && password.touched){
+      <span class="text-danger">
+        Password must be 8-16 characters long, contain at least one uppercase
+        letter, one lowercase letter, one number, and one special character.
+      </span>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="userRole" class="form-label">Role</label>
+      <select
+        name="userRole"
+        id="userRole"
+        class="form-control {{
+          role.errors && role.touched
+            ? 'is-invalid'
+            : role.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        formControlName="role"
+      >
+        <option disabled [defaultSelected]="true">---SELECT ROLE---</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="USER">USER</option>
+      </select>
+      @if(role.errors && role.touched){
+      <span class="text-danger">please select the role</span>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="regForm.invalid">
+      Register
+    </button>
+    <div>
+      <p>
+        If you have an account? &nbsp;
+        <span><a routerLink="/login" class="btn btn-link">Login</a></span>
+      </p>
+    </div>
+  </form>
+</main>

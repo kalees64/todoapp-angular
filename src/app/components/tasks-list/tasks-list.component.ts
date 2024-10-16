@@ -26,7 +26,9 @@ export class TasksListComponent {
     const userId = this.userService.getUserIdFromLocalStorage();
     this.taskService.getTasks().subscribe(
       (res: any) => {
-        this.tasks = res.filter((val: I_TASK) => val.created_by === userId);
+        this.tasks = res.data.filter(
+          (val: I_TASK) => val.created_by === userId
+        );
       },
       (error: Error) => {
         console.log(error);
@@ -34,11 +36,15 @@ export class TasksListComponent {
     );
   }
 
-  completeTask(id: string, task: I_TASK) {
-    const completeTask = { ...task, status: 'COMPLETED' };
+  completeTask(id: number, task: I_TASK) {
+    const completeTask = {
+      name: task.name,
+      created_by: task.created_by,
+      status: 'COMPLETED',
+    };
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log(res.data);
         this.toast.success('Task Completed');
         this.ngOnInit();
       },
@@ -49,10 +55,9 @@ export class TasksListComponent {
     );
   }
 
-  deleteTask(id: string) {
+  deleteTask(id: number) {
     this.taskService.deleteTask(id).subscribe(
       (res: any) => {
-        console.log(res);
         this.toast.success('Task Deleted');
         this.ngOnInit();
       },

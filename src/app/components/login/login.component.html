@@ -2,7 +2,7 @@
   <form
     [formGroup]="formData"
     (ngSubmit)="onSubmit()"
-    class="col-11 col-md-6 mx-auto"
+    class="col-11 col-md-4 mx-auto"
   >
     <h2>Login</h2>
     <div class="mb-3">
@@ -35,12 +35,20 @@
         formControlName="password"
       />
       <span class="text-danger" *ngIf="password.errors && password.touched"
-        >Password length is 8 to 16 letters</span
+        >Password must be 8-16 characters long, contain at least one uppercase
+        letter, one lowercase letter, one number, and one special
+        character.</span
       >
     </div>
 
     <button type="submit" [disabled]="formData.invalid" class="btn btn-primary">
       Login
     </button>
+    <div>
+      <p>
+        If you don't have an account? &nbsp;
+        <span><a routerLink="/register" class="btn btn-link">Register</a></span>
+      </p>
+    </div>
   </form>
 </main>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { I_USER } from '../utils/objects';
+import { I_NEW_USER, I_USER } from '../utils/objects';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,7 +14,7 @@ export class UserService {
     private toast: ToastrService
   ) {}
 
-  serverURL = 'http://localhost:3000';
+  serverURL = 'https://cms.krudraksha.com/items';
 
   isLoggedIn: boolean = false;
 
@@ -24,8 +24,8 @@ export class UserService {
     const url = `${this.serverURL}/users`;
     return this.http.get(url).subscribe(
       (res: any) => {
-        console.log(res);
-        const user: I_USER = res.find(
+        console.log(res.data);
+        const user: I_USER = res.data.find(
           (val: I_USER) => val.email === email && val.password === password
         );
         if (user) {
@@ -75,5 +75,15 @@ export class UserService {
     if (res) {
       return JSON.parse(res).role;
     }
+  }
+
+  getAllUsers() {
+    const url = `${this.serverURL}/users`;
+    return this.http.get(url);
+  }
+
+  addUser(user: I_NEW_USER) {
+    const url = `${this.serverURL}/users`;
+    return this.http.post(url, user);
   }
 }

@@ -17,13 +17,13 @@ export class TasksViewComponent implements OnInit {
     private taskService: TaskService
   ) {}
 
-  id!: string;
+  id!: number;
   task!: I_TASK;
 
   fetchTask() {
     this.taskService.getTaskBtId(this.id).subscribe(
       (res: any) => {
-        this.task = res;
+        this.task = res.data;
       },
       (error: Error) => {
         console.log(error);

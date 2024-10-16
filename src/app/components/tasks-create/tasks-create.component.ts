@@ -9,6 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { UserService } from '../../sevices/user.service';
+import { I_TASK } from '../../utils/objects';
 
 @Component({
   selector: 'app-tasks-create',
@@ -34,7 +35,7 @@ export class TasksCreateComponent implements OnInit {
       .addTask({ ...this.addForm.value, created_by: userId })
       .subscribe(
         (res: any) => {
-          console.log(res);
+          console.log(res.data);
           this.toast.success('Task Added');
           this.router.navigateByUrl('/tasks');
         },

@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../sevices/task.service';
 import { I_TASK } from '../../utils/objects';
+import { UserService } from '../../sevices/user.service';
 
 @Component({
   selector: 'app-tasks-edit',
@@ -23,20 +24,22 @@ export class TasksEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toast: ToastrService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private userService: UserService
   ) {
     this.id = this.route.snapshot.params['id'];
   }
 
-  id!: string;
+  id!: number;
   task!: I_TASK;
   updateForm!: FormGroup;
+  userRole!: string;
 
   fetchTask() {
     this.taskService.getTaskBtId(this.id).subscribe(
       (res: any) => {
-        this.task = res;
-        this.updateForm.patchValue(res);
+        this.task = res.data;
+        this.updateForm.patchValue(res.data);
       },
       (error: Error) => {
         console.log(error);
@@ -47,9 +50,13 @@ export class TasksEditComponent implements OnInit {
   onSubmit() {
     this.taskService.updateTask(this.id, this.updateForm.value).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log(res.data);
         this.toast.success('Task Updated');
-        this.router.navigateByUrl('/tasks');
+        if (this.userRole === 'ADMIN') {
+          this.router.navigateByUrl('/tasks/all');
+        } else {
+          this.router.navigateByUrl('/tasks');
+        }
       },
       (error: Error) => {
         console.log(error);
@@ -65,6 +72,7 @@ export class TasksEditComponent implements OnInit {
       status: ['', Validators.required],
       created_by: ['', Validators.required],
     });
+    this.userRole = this.userService.getUserRoleFromLocalStorage();
   }
 
   get name() {
