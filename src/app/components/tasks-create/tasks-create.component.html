@@ -21,6 +21,7 @@
             ? 'is-valid'
             : ''
         }}"
+        placeholder="Enter task name"
         formControlName="name"
       />
 
@@ -48,8 +49,11 @@
             : ''
         }}"
         formControlName="description"
+        placeholder="Enter the description..."
         [modules]="editorModules"
         theme="snow"
+        classes="rounded mt-1 border"
+        customToolbarPosition="bottom"
       >
       </quill-editor>
       @if(description.errors && (description.dirty || description.touched)){
@@ -63,9 +67,10 @@
       >
       } }
     </div>
-    {{ description.value }}
 
     <div class="pt-2 d-flex justify-content-center">
+      <button type="reset" class="btn btn-info text-white">Reset</button>
+      &nbsp;
       <button
         type="submit"
         class="btn btn-success"

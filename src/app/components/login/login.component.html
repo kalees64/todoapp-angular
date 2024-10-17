@@ -15,6 +15,7 @@
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
         formControlName="email"
+        placeholder="Enter email"
       />
       <span class="text-danger" *ngIf="email.errors && email.touched"
         >Please enter valid email</span
@@ -33,6 +34,7 @@
         }}"
         id="exampleInputPassword1"
         formControlName="password"
+        placeholder="Enter password"
       />
       <span class="text-danger" *ngIf="password.errors && password.touched"
         >Password must be 8-16 characters long, contain at least one uppercase

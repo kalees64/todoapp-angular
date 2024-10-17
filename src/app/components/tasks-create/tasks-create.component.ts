@@ -32,17 +32,16 @@ export class TasksCreateComponent implements OnInit {
 
   editorModules = {
     toolbar: [
-      ['bold', 'italic', 'underline'], // toggled buttons
+      ['bold', 'italic', 'underline', 'link', 'strike'], // toggled buttons
       ['blockquote', 'code-block'],
 
-      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ header: [7, 1, 2, 3, 4, 5, 6] }], // custom button values
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
       [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-
+      [{ direction: 'rtl' }],
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       [{ align: [] }],
-
       ['clean'],
     ],
   };

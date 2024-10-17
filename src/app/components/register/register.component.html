@@ -19,6 +19,7 @@
         id="userName"
         aria-describedby="userName"
         formControlName="name"
+        placeholder="Enter name"
       />
       @if(name.errors && name.touched){
       <span class="text-danger"> name must contains atleast 3 characters </span>
@@ -38,6 +39,7 @@
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
         formControlName="email"
+        placeholder="Enter email"
       />
       @if(email.errors && email.touched){
       <span class="text-danger"> please enter valid email </span>
@@ -56,6 +58,7 @@
         }}"
         id="exampleInputPassword1"
         formControlName="password"
+        placeholder="Enter password"
       />
       @if(password.errors && password.touched){
       <span class="text-danger">

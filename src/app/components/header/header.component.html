@@ -37,14 +37,10 @@
     </div>
 
     @if(user()){
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-sm-2 gap-5">
       <span class="">Welcome {{ user().name }}!</span>
 
-      <button
-        type="button"
-        class="btn btn-outline-light"
-        (click)="confirmLogout()"
-      >
+      <button type="button" class="btn-styled" (click)="confirmLogout()">
         Logout
       </button>
     </div>
