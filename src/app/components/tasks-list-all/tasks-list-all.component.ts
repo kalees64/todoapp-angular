@@ -4,6 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Config } from 'datatables.net';
 import { I_TASK } from './tasks.model';
 import Swal from 'sweetalert2';
+import { UserService } from '../../sevices/user.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-tasks-list-all',
@@ -11,11 +13,34 @@ import Swal from 'sweetalert2';
   styles: ``,
 })
 export class TasksListAllComponent implements OnInit {
-  constructor(private taskService: TaskService, private toast: ToastrService) {}
+  constructor(
+    private taskService: TaskService,
+    private toast: ToastrService,
+    private userService: UserService,
+    private fb: FormBuilder
+  ) {}
 
   tasks!: I_TASK[];
 
+  addForm!: FormGroup;
+
   dtOptions: Config = {};
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'link', 'strike'], // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ header: [7, 1, 2, 3, 4, 5, 6] }], // custom button values
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+      [{ direction: 'rtl' }],
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ align: [] }],
+      ['clean'],
+    ],
+  };
 
   fetchTasks() {
     this.taskService.getTasks().subscribe(
@@ -75,13 +100,51 @@ export class TasksListAllComponent implements OnInit {
     });
   }
 
+  onSubmit() {
+    const userId = this.userService.getUserIdFromLocalStorage();
+    console.log(this.addForm.value);
+    this.taskService
+      .addTask({ ...this.addForm.value, created_by: userId })
+      .subscribe(
+        (res: any) => {
+          console.log(res.data);
+          this.toast.success('Task Added');
+          this.ngOnInit();
+          this.reloadTable();
+        },
+        (error: Error) => {
+          console.log(error);
+          this.toast.error(error.message);
+        }
+      );
+  }
+
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.addForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(4)]],
+      status: ['PENDING'],
+      description: ['', [Validators.required, Validators.minLength(4)]],
+    });
 
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
     };
+  }
+
+  reloadTable() {
+    this.tasks = [];
+    this.fetchTasks();
+  }
+
+  get name() {
+    return this.addForm.controls['name'];
+  }
+
+  get description() {
+    return this.addForm.controls['description'];
   }
 }

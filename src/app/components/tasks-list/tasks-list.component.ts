@@ -1,16 +1,25 @@
-import { Sweetalert2ModuleConfig } from './../../../../node_modules/@sweetalert2/ngx-sweetalert2/lib/sweetalert2.module.d';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../sevices/user.service';
 import { DataTablesModule } from 'angular-datatables';
-import { Config } from 'datatables.net';
 import { BadgeComponent } from '../ui/badge/badge.component';
 import { I_TASK } from '../tasks-list-all/tasks.model';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
+import { TasksCreateComponent } from '../tasks-create/tasks-create.component';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+
+import 'datatables.net';
+import { Config } from 'datatables.net';
 
 @Component({
   selector: 'app-tasks-list',
@@ -22,20 +31,42 @@ import Swal from 'sweetalert2';
     BadgeComponent,
     NgIf,
     SweetAlert2Module,
+    TasksCreateComponent,
+    ReactiveFormsModule,
+    QuillModule,
   ],
   templateUrl: './tasks-list.component.html',
   styles: ``,
 })
-export class TasksListComponent {
+export class TasksListComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private toast: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private fb: FormBuilder
   ) {}
 
   tasks!: I_TASK[];
 
+  addForm!: FormGroup;
+
   dtOptions: Config = {};
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'link', 'strike'], // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ header: [7, 1, 2, 3, 4, 5, 6] }], // custom button values
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+      [{ direction: 'rtl' }],
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ align: [] }],
+      ['clean'],
+    ],
+  };
 
   fetchTasks() {
     const userId = this.userService.getUserIdFromLocalStorage();
@@ -98,13 +129,51 @@ export class TasksListComponent {
     });
   }
 
+  onSubmit() {
+    const userId = this.userService.getUserIdFromLocalStorage();
+    console.log(this.addForm.value);
+    this.taskService
+      .addTask({ ...this.addForm.value, created_by: userId })
+      .subscribe(
+        (res: any) => {
+          console.log(res.data);
+          this.toast.success('Task Added');
+          this.ngOnInit();
+          this.reloadTable();
+        },
+        (error: Error) => {
+          console.log(error);
+          this.toast.error(error.message);
+        }
+      );
+  }
+
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.addForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(4)]],
+      status: ['PENDING'],
+      description: ['', [Validators.required, Validators.minLength(4)]],
+    });
 
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
     };
+  }
+
+  reloadTable() {
+    this.tasks = [];
+    this.fetchTasks();
+  }
+
+  get name() {
+    return this.addForm.controls['name'];
+  }
+
+  get description() {
+    return this.addForm.controls['description'];
   }
 }

@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
         this.logout();
         // Swal.fire('Logged out success', '', 'success');
       } else {
-        Swal.fire('You are not logged out', '', 'error');
+        // Swal.fire('You are not logged out', '', 'error');
       }
     });
   }
@@ -47,13 +47,13 @@ export class HeaderComponent implements OnInit {
       localStorage.removeItem('user');
       this.userService.isAdminLoggedIn = false;
       this.userService.isLoggedIn = false;
-      // this.toast.success('Logged Out');
-      Swal.fire('Logged out success', '', 'success');
+      this.toast.success('Logged Out');
+      // Swal.fire('Logged out success', '', 'success');
       this.userService.logout();
       this.router.navigateByUrl('/login');
     } else {
-      // this.toast.error('You are not logged in');
-      Swal.fire('You are not logged out', '', 'error');
+      this.toast.error('You are not logged in');
+      // Swal.fire('You are not logged out', '', 'error');
     }
   }
 

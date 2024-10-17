@@ -10,14 +10,16 @@
       <input
         type="email"
         class="form-control {{
-          email.errors && email.touched ? 'is-invalid' : ''
+          email.errors && (email.touched || email.dirty) ? 'is-invalid' : ''
         }} {{ email.valid ? 'is-valid' : '' }}"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
         formControlName="email"
         placeholder="Enter email"
       />
-      <span class="text-danger" *ngIf="email.errors && email.touched"
+      <span
+        class="text-danger"
+        *ngIf="email.errors && (email.touched || email.dirty)"
         >Please enter valid email</span
       >
     </div>
@@ -26,7 +28,7 @@
       <input
         type="password"
         class="form-control {{
-          password.errors && password.touched
+          password.errors && (password.touched || password.dirty)
             ? 'is-invalid'
             : password.valid
             ? 'is-valid'
@@ -36,7 +38,9 @@
         formControlName="password"
         placeholder="Enter password"
       />
-      <span class="text-danger" *ngIf="password.errors && password.touched"
+      <span
+        class="text-danger"
+        *ngIf="password.errors && (password.touched || password.dirty)"
         >Password must be 8-16 characters long, contain at least one uppercase
         letter, one lowercase letter, one number, and one special
         character.</span
