@@ -32,11 +32,7 @@ export const routes: Routes = [
         component: TasksListComponent,
         canActivate: [authGuard],
       },
-      {
-        path: 'all',
-        component: TasksListAllComponent,
-        canActivate: [authGuard, roleGuard],
-      },
+
       {
         path: 'create',
         component: TasksCreateComponent,
@@ -53,6 +49,13 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
     ],
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: '',

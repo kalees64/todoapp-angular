@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
-import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
-import { BadgeComponent } from '../ui/badge/badge.component';
 import { I_TASK } from './tasks.model';
-import { NgIf } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tasks-list-all',
-  standalone: true,
-  imports: [RouterLink, DataTablesModule, BadgeComponent, NgIf],
   templateUrl: './tasks-list-all.component.html',
   styles: ``,
 })
@@ -52,17 +47,32 @@ export class TasksListAllComponent implements OnInit {
     );
   }
 
-  deleteTask(id: number) {
-    this.taskService.deleteTask(id).subscribe(
-      (res: any) => {
-        this.toast.success('Task Deleted');
-        this.ngOnInit();
-      },
-      (error: Error) => {
-        console.log(error);
-        this.toast.error(error.message);
+  deleteTask(id: number, task: I_TASK) {
+    console.log(id);
+    Swal.fire({
+      title: `Do you want to delete ${task.name}`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.taskService.deleteTask(id).subscribe(
+          (res: any) => {
+            console.log(res);
+            Swal.fire('Deleted!', 'Your task has been deleted.', 'success');
+            this.ngOnInit();
+          },
+          (error: Error) => {
+            console.log(error);
+            Swal.fire('Cancelled', 'Your task is safe', 'error');
+          }
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'Your file is safe', 'error');
       }
-    );
+    });
   }
 
   ngOnInit(): void {

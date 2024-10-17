@@ -22,18 +22,32 @@
             >Home</a
           >
         </li>
+        @if(user()){
         <li class="nav-item">
           <a class="nav-link text-secondary" routerLink="/tasks">Your Tasks</a>
         </li>
+        @if(user().role === 'ADMIN'){
         <li class="nav-item">
-          <a class="nav-link text-secondary" routerLink="/tasks/all"
+          <a class="nav-link text-secondary" routerLink="/admin/tasks"
             >All Tasks</a
           >
         </li>
+        } }
       </ul>
     </div>
-    <button type="button" class="btn btn-outline-light" (click)="logout()">
-      Logout
-    </button>
+
+    @if(user()){
+    <div class="d-flex align-items-center gap-2">
+      <span class="">Welcome {{ user().name }}!</span>
+
+      <button
+        type="button"
+        class="btn btn-outline-light"
+        (click)="confirmLogout()"
+      >
+        Logout
+      </button>
+    </div>
+    }
   </div>
 </nav>

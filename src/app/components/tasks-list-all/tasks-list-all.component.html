@@ -24,7 +24,7 @@
         @for(task of tasks; track task.id; let i = $index){
         <tr>
           <td>{{ i + 1 }}</td>
-          <td>{{ task.name }}</td>
+          <td [innerHTML]="task.name">{{ task.name }}</td>
           <td>
             <app-badge
               color="success"
@@ -57,7 +57,7 @@
             <button
               type="button"
               class="btn btn-danger"
-              (click)="deleteTask(task.id)"
+              (click)="deleteTask(task.id, task)"
             >
               Delete
             </button>

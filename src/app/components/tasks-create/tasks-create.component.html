@@ -23,16 +23,47 @@
         }}"
         formControlName="name"
       />
-      @if(name.errors && name.touched){
-      <span class="text-danger">Task name must contains atleast 3 letters</span>
-      }
+
+      @if(name.errors && (name.dirty || name.touched)){
+      @if(name.errors['required']){
+      <span class="text-danger">Task name required</span>
+
+      } @if(name.errors['minlength']){
+      <span class="text-danger"
+        >Task name must contains atleast
+        {{ name.errors["minlength"].requiredLength }} letters</span
+      >
+      } }
     </div>
 
-    <!-- <div>
+    <div>
       <label for="description" class="form-label">Description</label>
-      <quill-editor class="bg-danger" [modules]="editorModules" theme="snow">
+      <quill-editor
+        class="form-control
+      {{
+          description.errors && description.touched
+            ? 'is-invalid'
+            : description.valid
+            ? 'is-valid'
+            : ''
+        }}"
+        formControlName="description"
+        [modules]="editorModules"
+        theme="snow"
+      >
       </quill-editor>
-    </div> -->
+      @if(description.errors && (description.dirty || description.touched)){
+      @if(description.errors['required']){
+      <span class="text-danger">Task description required</span>
+
+      } @if(description.errors['minlength']){
+      <span class="text-danger"
+        >Task description must contains atleast
+        {{ description.errors["minlength"].requiredLength }} letters</span
+      >
+      } }
+    </div>
+    {{ description.value }}
 
     <div class="pt-2 d-flex justify-content-center">
       <button

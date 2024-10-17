@@ -10,11 +10,12 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../sevices/user.service';
 import { QuillModule } from 'ngx-quill';
+import { SharedModuleModule } from '../../shared-module/shared-module.module';
 
 @Component({
   selector: 'app-tasks-create',
   standalone: true,
-  imports: [ReactiveFormsModule, QuillModule],
+  imports: [ReactiveFormsModule, QuillModule, SharedModuleModule],
   templateUrl: './tasks-create.component.html',
   styles: ``,
 })
@@ -32,15 +33,23 @@ export class TasksCreateComponent implements OnInit {
   editorModules = {
     toolbar: [
       ['bold', 'italic', 'underline'], // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
       [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ header: [1, 2, 3, false] }],
+      [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       [{ align: [] }],
-      ['link', 'image'],
+
+      ['clean'],
     ],
   };
 
   onSubmit() {
     const userId = this.userService.getUserIdFromLocalStorage();
+    console.log(this.addForm.value);
     this.taskService
       .addTask({ ...this.addForm.value, created_by: userId })
       .subscribe(
@@ -58,12 +67,17 @@ export class TasksCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.addForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', [Validators.required, Validators.minLength(4)]],
       status: ['PENDING'],
+      description: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
   get name() {
     return this.addForm.controls['name'];
+  }
+
+  get description() {
+    return this.addForm.controls['description'];
   }
 }

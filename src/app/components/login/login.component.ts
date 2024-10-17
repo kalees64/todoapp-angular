@@ -9,7 +9,6 @@ import {
 import { UserService } from '../../sevices/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { I_USER } from '../register/user.model';
 
 @Component({
   selector: 'app-login',
@@ -29,34 +28,29 @@ export class LoginComponent implements OnInit {
   formData!: FormGroup;
 
   onSubmit() {
-    this.userService.getAllUsers().subscribe(
-      (res: any) => {
-        console.log(res.data);
-        const user: I_USER = res.data.find(
-          (val: I_USER) =>
-            val.email === this.formData.value.email &&
-            val.password === this.formData.value.password
-        );
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.toast.success('Login Success');
-          if (user.role === 'ADMIN') {
-            this.userService.isAdminLoggedIn = true;
-            this.userService.isLoggedIn = true;
-            this.router.navigateByUrl('/tasks/all');
+    this.userService
+      .login(this.formData.value.email, this.formData.value.password)
+      .subscribe(
+        (user: any) => {
+          if (user) {
+            this.toast.success('Login Success');
+            if (user.role === 'ADMIN') {
+              this.userService.isAdminLoggedIn = true;
+              this.userService.isLoggedIn = true;
+              this.router.navigateByUrl('/admin');
+            } else {
+              this.userService.isLoggedIn = true;
+              this.router.navigateByUrl('/tasks');
+            }
           } else {
-            this.userService.isLoggedIn = true;
-            this.router.navigateByUrl('/tasks');
+            this.toast.error('Invalid email & password');
           }
-        } else {
-          this.toast.error('Invalid email & password');
+        },
+        (error: Error) => {
+          console.log(error);
+          this.toast.error(error.message);
         }
-      },
-      (error: Error) => {
-        console.log(error);
-        this.toast.error(error.message);
-      }
-    );
+      );
   }
 
   ngOnInit(): void {

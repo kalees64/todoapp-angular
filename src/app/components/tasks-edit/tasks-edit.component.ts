@@ -53,7 +53,7 @@ export class TasksEditComponent implements OnInit {
         console.log(res.data);
         this.toast.success('Task Updated');
         if (this.userRole === 'ADMIN') {
-          this.router.navigateByUrl('/tasks/all');
+          this.router.navigateByUrl('/admin/tasks');
         } else {
           this.router.navigateByUrl('/tasks');
         }

@@ -1,3 +1,4 @@
+import { Sweetalert2ModuleConfig } from './../../../../node_modules/@sweetalert2/ngx-sweetalert2/lib/sweetalert2.module.d';
 import { Component } from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
 import { CommonModule, NgIf } from '@angular/common';
@@ -8,11 +9,20 @@ import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
 import { BadgeComponent } from '../ui/badge/badge.component';
 import { I_TASK } from '../tasks-list-all/tasks.model';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tasks-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, DataTablesModule, BadgeComponent, NgIf],
+  imports: [
+    CommonModule,
+    RouterLink,
+    DataTablesModule,
+    BadgeComponent,
+    NgIf,
+    SweetAlert2Module,
+  ],
   templateUrl: './tasks-list.component.html',
   styles: ``,
 })
@@ -60,17 +70,32 @@ export class TasksListComponent {
     );
   }
 
-  deleteTask(id: number) {
-    this.taskService.deleteTask(id).subscribe(
-      (res: any) => {
-        this.toast.success('Task Deleted');
-        this.ngOnInit();
-      },
-      (error: Error) => {
-        console.log(error);
-        this.toast.error(error.message);
+  deleteTask(id: number, task: I_TASK) {
+    console.log(id);
+    Swal.fire({
+      title: `Do you want to delete ${task.name}`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.taskService.deleteTask(id).subscribe(
+          (res: any) => {
+            console.log(res);
+            Swal.fire('Deleted!', 'Your task has been deleted.', 'success');
+            this.ngOnInit();
+          },
+          (error: Error) => {
+            console.log(error);
+            Swal.fire('Cancelled', 'Your task is safe', 'error');
+          }
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'Your file is safe', 'error');
       }
-    );
+    });
   }
 
   ngOnInit(): void {
