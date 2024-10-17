@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { I_ADD_TASK, I_UPDATE_TASK } from '../utils/objects';
 import { environment } from '../../environments/environment';
+import {
+  I_ADD_TASK,
+  I_UPDATE_TASK,
+} from '../components/tasks-list-all/tasks.model';
 
 @Injectable({
   providedIn: 'root',

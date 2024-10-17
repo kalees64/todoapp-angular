@@ -8,7 +8,6 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../sevices/user.service';
-import { I_USER } from '../../utils/objects';
 
 @Component({
   selector: 'app-register',

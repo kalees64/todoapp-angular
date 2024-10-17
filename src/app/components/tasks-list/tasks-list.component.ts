@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
-import { I_TASK } from '../../utils/objects';
 import { CommonModule, NgIf } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
@@ -8,6 +7,7 @@ import { UserService } from '../../sevices/user.service';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
 import { BadgeComponent } from '../ui/badge/badge.component';
+import { I_TASK } from '../tasks-list-all/tasks.model';
 
 @Component({
   selector: 'app-tasks-list',

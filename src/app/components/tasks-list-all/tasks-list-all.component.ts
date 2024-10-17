@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { I_TASK } from '../../utils/objects';
 import { TaskService } from '../../sevices/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
 import { BadgeComponent } from '../ui/badge/badge.component';
+import { I_TASK } from './tasks.model';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-tasks-list-all',
   standalone: true,
-  imports: [RouterLink, DataTablesModule, BadgeComponent],
+  imports: [RouterLink, DataTablesModule, BadgeComponent, NgIf],
   templateUrl: './tasks-list-all.component.html',
   styles: ``,
 })

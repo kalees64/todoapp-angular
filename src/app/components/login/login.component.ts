@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../sevices/user.service';
 import { Router, RouterLink } from '@angular/router';
-import { I_USER } from '../../utils/objects';
 import { ToastrService } from 'ngx-toastr';
+import { I_USER } from '../register/user.model';
 
 @Component({
   selector: 'app-login',

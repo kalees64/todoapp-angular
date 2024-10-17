@@ -8,8 +8,8 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../sevices/task.service';
-import { I_TASK } from '../../utils/objects';
 import { UserService } from '../../sevices/user.service';
+import { I_TASK } from '../tasks-list-all/tasks.model';
 
 @Component({
   selector: 'app-tasks-edit',

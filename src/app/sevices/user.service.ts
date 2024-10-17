@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { I_NEW_USER, I_USER } from '../utils/objects';
 import { environment } from '../../environments/environment';
+import { I_NEW_USER } from '../components/register/user.model';
 
 @Injectable({
   providedIn: 'root',
