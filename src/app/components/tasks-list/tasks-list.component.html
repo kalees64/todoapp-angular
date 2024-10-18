@@ -1,17 +1,18 @@
 <main class="p-2">
-  <h2 class="text-3xl font-bold">
-    Your Tasks @if(tasks){({{ tasks.length }})}
-  </h2>
+  <div class="w-full flex justify-between items-center">
+    <h2 class="text-3xl font-bold">
+      All Tasks @if(tasks){({{ tasks.length }})}
+    </h2>
 
-  <!-- Modal toggle -->
-  <button
-    data-bs-toggle="modal"
-    data-bs-target="#exampleModal"
-    class="btn-blue"
-    type="button"
-  >
-    Create Task
-  </button>
+    <button
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      class="btn-blue"
+      type="button"
+    >
+      Create Task
+    </button>
+  </div>
 
   <!-- Main modal -->
   <div
