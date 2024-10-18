@@ -1,11 +1,11 @@
-<main class="p-2 row">
+<main class="p-2 grid justify-center">
   <form
     method="post"
-    class="col-12 col-md-6 mx-auto"
+    class="w-96 max-sm:w-11/12 mx-auto"
     [formGroup]="updateForm"
     (ngSubmit)="onSubmit()"
   >
-    <h2>Update Task</h2>
+    <h2 class="text-3xl font-bold">Update Task</h2>
 
     <div>
       <label for="taskName" class="form-label">Task Name</label>
@@ -13,18 +13,20 @@
         type="text"
         name="taskName"
         id="taskName"
-        class="form-control {{
+        class="form-input {{
           name.errors && name.touched
-            ? 'is-invalid'
+            ? 'invalid-input'
             : name.valid
-            ? 'is-valid'
+            ? 'valid-input'
             : ''
         }}"
         formControlName="name"
         placeholder="Enter task name"
       />
       @if(name.errors && name.touched){
-      <span class="text-danger">Task name must contains atleast 3 letters</span>
+      <span class="text-red-500"
+        >Task name must contains atleast 3 letters</span
+      >
       }
     </div>
 
@@ -33,11 +35,11 @@
       <select
         name="taskStatus"
         id="taskStatus"
-        class="form-control {{
+        class="form-input {{
           status.errors && status.touched
-            ? 'is-invalid'
+            ? 'invalid-input'
             : status.valid
-            ? 'is-valid'
+            ? 'valid-input'
             : ''
         }}"
         formControlName="status"
@@ -47,13 +49,45 @@
         <option value="COMPLETED">COMPLETED</option>
       </select>
       @if(status.errors && status.touched){
-      <span class="text-danger">Please select the status of the task</span>
+      <span class="text-red-500">Please select the status of the task</span>
       }
     </div>
+
+    <div>
+      <label for="description" class="form-label">Description</label>
+      <quill-editor
+        [modules]="editorModules"
+        theme="snow"
+        class="form-input
+      {{
+          description.errors && description.touched
+            ? 'invalid-input'
+            : description.valid
+            ? 'valid-input'
+            : ''
+        }}"
+        formControlName="description"
+        placeholder="Enter the description..."
+        classes="mt-1 rounded border"
+      ></quill-editor>
+      @if(description.errors && (description.dirty || description.touched)){
+      @if(description.errors['required']){
+      <span class="text-red-500">Task description required</span>
+
+      } @if(description.errors['minlength']){
+      <span class="text-red-500"
+        >Task description must contains atleast
+        {{ description.errors["minlength"].requiredLength }} letters</span
+      >
+      } }
+    </div>
+
     <div class="pt-2 d-flex justify-content-center">
       <button
         type="submit"
-        class="btn btn-success"
+        class="btn-green {{
+          updateForm.invalid ? 'cursor-not-allowed' : ' cursor-pointer'
+        }}"
         [disabled]="updateForm.invalid"
       >
         Update Task

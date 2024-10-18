@@ -6,6 +6,7 @@ import { I_TASK } from './tasks.model';
 import Swal from 'sweetalert2';
 import { UserService } from '../../sevices/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { I_USER } from '../register/user.model';
 
 @Component({
   selector: 'app-tasks-list-all',
@@ -21,6 +22,8 @@ export class TasksListAllComponent implements OnInit {
   ) {}
 
   tasks!: I_TASK[];
+
+  user!: I_USER;
 
   addForm!: FormGroup;
 
@@ -41,9 +44,18 @@ export class TasksListAllComponent implements OnInit {
       ['clean'],
     ],
   };
+  isLoading: boolean = false;
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  stopLoading() {
+    this.isLoading = false;
+  }
 
   fetchTasks() {
-    this.taskService.getTasks().subscribe(
+    this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
         this.tasks = res.data;
       },
@@ -58,6 +70,7 @@ export class TasksListAllComponent implements OnInit {
       name: task.name,
       created_by: task.created_by,
       status: 'COMPLETED',
+      description: task.description,
     };
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
@@ -101,6 +114,7 @@ export class TasksListAllComponent implements OnInit {
   }
 
   onSubmit() {
+    this.startLoading();
     const userId = this.userService.getUserIdFromLocalStorage();
     console.log(this.addForm.value);
     this.taskService
@@ -108,12 +122,14 @@ export class TasksListAllComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res.data);
+          this.stopLoading();
           this.toast.success('Task Added');
           this.ngOnInit();
           this.reloadTable();
         },
         (error: Error) => {
           console.log(error);
+          this.stopLoading();
           this.toast.error(error.message);
         }
       );
@@ -121,6 +137,8 @@ export class TasksListAllComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.user = this.userService.getUserFromLocalStorage();
 
     this.addForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(4)]],

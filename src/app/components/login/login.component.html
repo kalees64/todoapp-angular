@@ -1,24 +1,23 @@
-<main class="p-2 row">
+<main class="w-full p-2 grid justify-center">
   <form
     [formGroup]="formData"
     (ngSubmit)="onSubmit()"
-    class="col-11 col-md-4 mx-auto"
+    class="w-96 max-sm:w-11/12 max-sm-p-1"
   >
-    <h2>Login</h2>
+    <h2 class="text-3xl font-bold">Login</h2>
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Email address</label>
+
       <input
         type="email"
-        class="form-control {{
-          email.errors && (email.touched || email.dirty) ? 'is-invalid' : ''
-        }} {{ email.valid ? 'is-valid' : '' }}"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp"
-        formControlName="email"
+        class=" form-input {{
+          email.errors && (email.touched || email.dirty) ? 'invalid-input' : ''
+        }} {{ email.valid ? 'valid-input' : '' }}"
         placeholder="Enter email"
+        formControlName="email"
       />
       <span
-        class="text-danger"
+        class="text-red-500"
         *ngIf="email.errors && (email.touched || email.dirty)"
         >Please enter valid email</span
       >
@@ -27,11 +26,11 @@
       <label for="exampleInputPassword1" class="form-label">Password</label>
       <input
         type="password"
-        class="form-control {{
+        class="form-input {{
           password.errors && (password.touched || password.dirty)
-            ? 'is-invalid'
+            ? 'invalid-input'
             : password.valid
-            ? 'is-valid'
+            ? 'valid-input'
             : ''
         }}"
         id="exampleInputPassword1"
@@ -39,7 +38,7 @@
         placeholder="Enter password"
       />
       <span
-        class="text-danger"
+        class="text-red-500"
         *ngIf="password.errors && (password.touched || password.dirty)"
         >Password must be 8-16 characters long, contain at least one uppercase
         letter, one lowercase letter, one number, and one special
@@ -47,13 +46,25 @@
       >
     </div>
 
-    <button type="submit" [disabled]="formData.invalid" class="btn btn-primary">
-      Login
+    <button
+      type="submit"
+      [disabled]="formData.invalid || isLoading"
+      class="btn-blue flex gap-2 items-center {{
+        formData.invalid ? 'cursor-not-allowed' : ' cursor-pointer'
+      }}"
+    >
+      @if(isLoading){
+      <span
+        class="size-5 border-4 border-gray-400 border-t-white rounded-full animate-spin"
+      ></span>
+      } Login
     </button>
     <div>
       <p>
         If you don't have an account? &nbsp;
-        <span><a routerLink="/register" class="btn btn-link">Register</a></span>
+        <span
+          ><a routerLink="/register" class="text-blue-600">Register</a></span
+        >
       </p>
     </div>
   </form>

@@ -68,6 +68,16 @@ export class TasksListComponent implements OnInit {
     ],
   };
 
+  isLoading: boolean = false;
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  stopLoading() {
+    this.isLoading = false;
+  }
+
   fetchTasks() {
     const userId = this.userService.getUserIdFromLocalStorage();
     this.taskService.getTasks().subscribe(
@@ -87,6 +97,7 @@ export class TasksListComponent implements OnInit {
       name: task.name,
       created_by: task.created_by,
       status: 'COMPLETED',
+      description: task.description,
     };
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
@@ -132,10 +143,12 @@ export class TasksListComponent implements OnInit {
   onSubmit() {
     const userId = this.userService.getUserIdFromLocalStorage();
     console.log(this.addForm.value);
+    this.startLoading();
     this.taskService
       .addTask({ ...this.addForm.value, created_by: userId })
       .subscribe(
         (res: any) => {
+          this.stopLoading();
           console.log(res.data);
           this.toast.success('Task Added');
           this.ngOnInit();
@@ -143,6 +156,7 @@ export class TasksListComponent implements OnInit {
         },
         (error: Error) => {
           console.log(error);
+          this.stopLoading();
           this.toast.error(error.message);
         }
       );

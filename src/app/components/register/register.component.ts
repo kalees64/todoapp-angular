@@ -26,19 +26,33 @@ export class RegisterComponent implements OnInit {
 
   regForm!: FormGroup;
 
+  isLoading: boolean = false;
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  stopLoading() {
+    this.isLoading = false;
+  }
+
   onSubmit() {
+    this.startLoading();
     this.userService.addUser(this.regForm.value).subscribe(
       (res: any) => {
         console.log(res.data);
         if (res.data.id) {
+          this.stopLoading();
           this.toast.success('Register successful');
           this.router.navigateByUrl('/login');
         } else {
+          this.stopLoading();
           this.toast.error('Register failed');
         }
       },
       (error: Error) => {
         console.log(error);
+        this.stopLoading();
         this.toast.error(error.message);
       }
     );

@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { RegisterComponent } from './components/register/register.component';
+import { TasksTableComponent } from './components/tasks-table/tasks-table.component';
 
 export const routes: Routes = [
   {

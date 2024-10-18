@@ -27,13 +27,25 @@ export class LoginComponent implements OnInit {
 
   formData!: FormGroup;
 
+  isLoading: boolean = false;
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  stopLoading() {
+    this.isLoading = false;
+  }
+
   onSubmit() {
+    this.startLoading();
     this.userService
       .login(this.formData.value.email, this.formData.value.password)
       .subscribe(
         (user: any) => {
           if (user) {
             this.toast.success('Login Success');
+            this.stopLoading();
             if (user.role === 'ADMIN') {
               this.userService.isAdminLoggedIn = true;
               this.userService.isLoggedIn = true;
@@ -43,11 +55,13 @@ export class LoginComponent implements OnInit {
               this.router.navigateByUrl('/tasks');
             }
           } else {
+            this.stopLoading();
             this.toast.error('Invalid email & password');
           }
         },
         (error: Error) => {
           console.log(error);
+          this.stopLoading();
           this.toast.error(error.message);
         }
       );

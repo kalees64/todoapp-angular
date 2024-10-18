@@ -10,11 +10,12 @@ import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../sevices/task.service';
 import { UserService } from '../../sevices/user.service';
 import { I_TASK } from '../tasks-list-all/tasks.model';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-tasks-edit',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, QuillModule],
   templateUrl: './tasks-edit.component.html',
   styles: ``,
 })
@@ -34,6 +35,22 @@ export class TasksEditComponent implements OnInit {
   task!: I_TASK;
   updateForm!: FormGroup;
   userRole!: string;
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'link', 'strike'], // toggled buttons
+      ['blockquote', 'code-block'],
+
+      [{ header: [7, 1, 2, 3, 4, 5, 6] }], // custom button values
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+      [{ direction: 'rtl' }],
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ align: [] }],
+      ['clean'],
+    ],
+  };
 
   fetchTask() {
     this.taskService.getTaskBtId(this.id).subscribe(
@@ -70,6 +87,7 @@ export class TasksEditComponent implements OnInit {
       id: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(3)]],
       status: ['', Validators.required],
+      description: ['Description', Validators.required],
       created_by: ['', Validators.required],
     });
     this.userRole = this.userService.getUserRoleFromLocalStorage();
@@ -81,5 +99,9 @@ export class TasksEditComponent implements OnInit {
 
   get status() {
     return this.updateForm.controls['status'];
+  }
+
+  get description() {
+    return this.updateForm.controls['description'];
   }
 }

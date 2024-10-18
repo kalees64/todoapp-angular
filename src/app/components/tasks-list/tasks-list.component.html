@@ -1,194 +1,191 @@
 <main class="p-2">
-  <h2>Your Tasks @if(tasks){({{ tasks.length }})}</h2>
+  <h2 class="text-3xl font-bold">
+    Your Tasks @if(tasks){({{ tasks.length }})}
+  </h2>
 
-  <div>
-    <!-- <a routerLink="/tasks/create" class="btn btn-primary">Create Task</a> -->
-    <!-- Button trigger modal -->
-    <button
-      type="button"
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-    >
-      Create Task
-    </button>
+  <!-- Modal toggle -->
+  <button
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+    class="btn-blue"
+    type="button"
+  >
+    Create Task
+  </button>
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Create Task</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form
-              method="post"
-              class="col-12 mx-auto"
-              [formGroup]="addForm"
-              (ngSubmit)="onSubmit()"
-            >
-              <div>
-                <label for="taskName" class="form-label">Task Name</label>
-                <input
-                  type="text"
-                  name="taskName"
-                  id="taskName"
-                  class="form-control
+  <!-- Main modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create Task</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            method="post"
+            class="col-12 mx-auto"
+            [formGroup]="addForm"
+            (ngSubmit)="onSubmit()"
+          >
+            <div>
+              <label for="taskName" class="form-label">Task Name</label>
+              <input
+                type="text"
+                name="taskName"
+                id="taskName"
+                class="form-input
       {{
-                    name.errors && name.touched
-                      ? 'is-invalid'
-                      : name.valid
-                      ? 'is-valid'
-                      : ''
-                  }}"
-                  placeholder="Enter task name"
-                  formControlName="name"
-                />
+                  name.errors && name.touched
+                    ? 'invalid-input'
+                    : name.valid
+                    ? 'valid-input'
+                    : ''
+                }}"
+                placeholder="Enter task name"
+                formControlName="name"
+              />
 
-                @if(name.errors && (name.dirty || name.touched)){
-                @if(name.errors['required']){
-                <span class="text-danger">Task name required</span>
+              @if(name.errors && (name.dirty || name.touched)){
+              @if(name.errors['required']){
+              <span class="text-red-500">Task name required</span>
 
-                } @if(name.errors['minlength']){
-                <span class="text-danger"
-                  >Task name must contains atleast
-                  {{ name.errors["minlength"].requiredLength }} letters</span
-                >
-                } }
-              </div>
+              } @if(name.errors['minlength']){
+              <span class="text-red-500"
+                >Task name must contains atleast
+                {{ name.errors["minlength"].requiredLength }} letters</span
+              >
+              } }
+            </div>
 
-              <div>
-                <label for="description" class="form-label">Description</label>
-                <quill-editor
-                  class="form-control
+            <div>
+              <label for="description" class="form-label">Description</label>
+              <quill-editor
+                class="form-input
       {{
-                    description.errors && description.touched
-                      ? 'is-invalid'
-                      : description.valid
-                      ? 'is-valid'
-                      : ''
+                  description.errors && description.touched
+                    ? 'invalid-input'
+                    : description.valid
+                    ? 'is-valid'
+                    : ''
+                }}"
+                formControlName="description"
+                placeholder="Enter the description..."
+                [modules]="editorModules"
+                theme="snow"
+                classes="rounded mt-1 border"
+                customToolbarPosition="bottom"
+              >
+              </quill-editor>
+              @if(description.errors && (description.dirty ||
+              description.touched)){ @if(description.errors['required']){
+              <span class="text-red-500">Task description required</span>
+
+              } @if(description.errors['minlength']){
+              <span class="text-red-500"
+                >Task description must contains atleast
+                {{ description.errors["minlength"].requiredLength }}
+                letters</span
+              >
+              } }
+            </div>
+
+            <div class="pt-2 d-flex justify-content-center">
+              <div class="modal-footer">
+                <button type="reset" class="btn-info text-white">Reset</button>
+                <button
+                  type="submit"
+                  class="btn-blue flex gap-2 items-center  {{
+                    addForm.invalid ? 'cursor-not-allowed' : ' cursor-pointer'
                   }}"
-                  formControlName="description"
-                  placeholder="Enter the description..."
-                  [modules]="editorModules"
-                  theme="snow"
-                  classes="rounded mt-1 border"
-                  customToolbarPosition="bottom"
+                  [disabled]="addForm.invalid || isLoading"
                 >
-                </quill-editor>
-                @if(description.errors && (description.dirty ||
-                description.touched)){ @if(description.errors['required']){
-                <span class="text-danger">Task description required</span>
-
-                } @if(description.errors['minlength']){
-                <span class="text-danger"
-                  >Task description must contains atleast
-                  {{ description.errors["minlength"].requiredLength }}
-                  letters</span
-                >
-                } }
+                  @if(isLoading){
+                  <span
+                    class="size-5 border-4 border-gray-400 border-t-white rounded-full animate-spin"
+                  ></span>
+                  } Add Task</button
+                ><button type="button" class="btn-red" data-bs-dismiss="modal">
+                  Close
+                </button>
               </div>
-
-              <div class="pt-2 d-flex justify-content-center">
-                <div class="modal-footer">
-                  <button type="reset" class="btn btn-info text-white">
-                    Reset
-                  </button>
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="addForm.invalid"
-                  >
-                    Add Task</button
-                  ><button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="pt-2">
+  <div class="">
     @if(tasks){
     <table
       id="table"
       datatable
       [dtOptions]="dtOptions"
-      class="table table-bordered table-hover"
+      class="table table-auto border"
       *ngIf="tasks.length > 0"
     >
       <thead>
-        <tr>
-          <th>Sno</th>
-          <th>Task Name</th>
-          <th>Status</th>
-          <th>Action</th>
+        <tr class="border">
+          <th class="border p-1 px-2 text-start">Sno</th>
+          <th class="border p-1 px-2 text-start">Task Name</th>
+          <th class="border p-1 px-2 text-start">Description</th>
+          <th class="border p-1 px-2 text-start">Status</th>
+          <th class="border p-1 px-2 text-start">Action</th>
         </tr>
       </thead>
       <tbody>
         @for(task of tasks; track task.id; let i = $index){
         <tr>
-          <td>{{ i + 1 }}</td>
-          <td [innerHTML]="task.name">{{ task.name }}</td>
-          <td>
-            <!-- <span class="badge bg-success" *ngIf="task.status == 'COMPLETED'">
-              {{ task.status }}</span
-            >
-            <span class="badge bg-danger" *ngIf="task.status == 'PENDING'">
-              {{ task.status }}</span
-            > -->
+          <td class="border p-1 px-2 text-start align-middle">{{ i + 1 }}</td>
+          <td class="border p-1 px-2 text-start" [innerHTML]="task.name">
+            {{ task.name }}
+          </td>
+          <td class="border p-1 px-2 text-start" [innerHTML]="task.description">
+            {{ task.description }}
+          </td>
 
+          <td class="border p-1 px-2 text-start">
             <app-badge
-              color="success"
+              color="green"
               value="{{ task.status }}"
               *ngIf="task.status == 'COMPLETED'"
             ></app-badge>
             <app-badge
-              color="danger"
+              color="red"
               value="{{ task.status }}"
               *ngIf="task.status == 'PENDING'"
             ></app-badge>
           </td>
-          <td>
-            <a routerLink="/tasks/view/{{ task.id }}" class="btn btn-secondary"
+          <td class="border flex items-center gap-2 m-0 p-2">
+            <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
               >View</a
             >
-            &nbsp;
-            <a routerLink="/tasks/edit/{{ task.id }}" class="btn btn-info"
-              >Edit</a
-            >
-            &nbsp; @if(task.status === 'PENDING'){
+
+            <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info">Edit</a>
+            @if(task.status === 'PENDING'){
             <button
               type="button"
-              class="btn btn-success"
+              class="btn-green"
               (click)="completeTask(task.id, task)"
             >
               Mark as completed
             </button>
-            &nbsp; }
+            }
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn-red"
               (click)="deleteTask(task.id, task)"
             >
               Delete
