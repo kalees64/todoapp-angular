@@ -40,9 +40,7 @@
       <span
         class="text-red-500"
         *ngIf="password.errors && (password.touched || password.dirty)"
-        >Password must be 8-16 characters long, contain at least one uppercase
-        letter, one lowercase letter, one number, and one special
-        character.</span
+        >Password is required</span
       >
     </div>
 
@@ -60,7 +58,7 @@
       } Login
     </button>
     <div>
-      <p>
+      <p class="">
         If you don't have an account? &nbsp;
         <span
           ><a routerLink="/register" class="text-blue-600">Register</a></span

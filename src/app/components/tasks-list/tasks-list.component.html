@@ -1,7 +1,7 @@
 <main class="p-2">
   <div class="w-full flex justify-between items-center">
     <h2 class="text-3xl font-bold">
-      All Tasks @if(tasks){({{ tasks.length }})}
+      Your Tasks @if(tasks){({{ tasks.length }})}
     </h2>
 
     <button
@@ -128,6 +128,40 @@
     </div>
   </div>
 
+  <!-- Widgets -->
+  @if(tasks){
+  <div
+    class="flex items-center p-2 flex-wrap gap-2 max-sm:flex-col max-sm:justify-center animate-start"
+  >
+    <div class="t-card w-48 h-28 max-sm:w-96">
+      <h2 class="text-xl font-bold text-center">Total Tasks</h2>
+      <h1 class="text-3xl font-bold text-center">
+        {{ tasks.length < 10 ? "0" + tasks.length : tasks.length }}
+      </h1>
+    </div>
+    <div class="t-card w-48 h-28 max-sm:w-96">
+      <h2 class="text-xl font-bold text-center">Completed Tasks</h2>
+      <h1 class="text-3xl font-bold text-center">
+        {{
+          completedTasks.length < 10
+            ? "0" + completedTasks.length
+            : completedTasks.length
+        }}
+      </h1>
+    </div>
+    <div class="t-card w-48 h-28 max-sm:w-96">
+      <h2 class="text-xl font-bold text-center">Pending Tasks</h2>
+      <h1 class="text-3xl font-bold text-center">
+        {{
+          pendingTasks.length < 10
+            ? "0" + pendingTasks.length
+            : pendingTasks.length
+        }}
+      </h1>
+    </div>
+  </div>
+  }
+
   <div class="">
     @if(tasks){
     <table
@@ -141,7 +175,6 @@
         <tr class="border">
           <th class="border p-1 px-2 text-start">Sno</th>
           <th class="border p-1 px-2 text-start">Task Name</th>
-          <th class="border p-1 px-2 text-start">Description</th>
           <th class="border p-1 px-2 text-start">Status</th>
           <th class="border p-1 px-2 text-start">Action</th>
         </tr>
@@ -152,9 +185,6 @@
           <td class="border p-1 px-2 text-start align-middle">{{ i + 1 }}</td>
           <td class="border p-1 px-2 text-start" [innerHTML]="task.name">
             {{ task.name }}
-          </td>
-          <td class="border p-1 px-2 text-start" [innerHTML]="task.description">
-            {{ task.description }}
           </td>
 
           <td class="border p-1 px-2 text-start">

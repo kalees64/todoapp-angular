@@ -27,7 +27,7 @@ export class TaskService {
   }
 
   getTaskBtId(id: number) {
-    const url = `${this.serverURL}/tasks/${id}`;
+    const url = `${this.serverURL}/tasks/${id}?fields=id,name,status,description,created_by,created_by.id,created_by.name`;
     return this.http.get(url);
   }
 

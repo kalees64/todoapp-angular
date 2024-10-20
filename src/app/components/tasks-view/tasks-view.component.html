@@ -1,12 +1,31 @@
-<main class="p-2">
+<main class="p-2 pt-4 grid justify-center items-center">
   @if(task){
-  <h2 class="text-3xl font-bold">Your Task</h2>
-  <p>
-    Name : <b>{{ task.name }}</b>
-  </p>
-  <p>
-    Status : <b>{{ task.status }}</b>
-  </p>
+  <div class="t-card w-96 max-sm:w-11/12 mx-auto">
+    <img src="images/task{{ img }}.png" alt="Task Image" class="rounded-lg" />
+    <div class="pt-2">
+      <h2 class="text-2xl font-bold">{{ task.name }}</h2>
+      <span [innerHTML]="task.description">{{ task.description }}</span>
+      <span class="block"><b>Created By</b> : {{ task.created_by.name }}</span>
+      <span class="block pt-1">
+        <b>Status</b> :
+        <span
+          class="font-bold {{
+            task.status === 'COMPLETED' ? 'text-green-500' : 'text-yellow-400'
+          }}"
+        >
+          {{ task.status }}</span
+        >
+      </span>
+      <div class="pt-1">
+        <a
+          routerLink="/tasks/edit/{{ task.id }}"
+          type="button"
+          class="btn-green"
+          >Edit</a
+        >
+      </div>
+    </div>
+  </div>
   } @else {
   <p>Loading...</p>
   }

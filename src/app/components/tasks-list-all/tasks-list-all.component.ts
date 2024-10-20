@@ -23,6 +23,10 @@ export class TasksListAllComponent implements OnInit {
 
   tasks!: I_TASK[];
 
+  completedTasks!: I_TASK[];
+
+  pendingTasks!: I_TASK[];
+
   user!: I_USER;
 
   addForm!: FormGroup;
@@ -58,6 +62,12 @@ export class TasksListAllComponent implements OnInit {
     this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
         this.tasks = res.data;
+        this.completedTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'COMPLETED'
+        );
+        this.pendingTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'PENDING'
+        );
       },
       (error: Error) => {
         console.log(error);

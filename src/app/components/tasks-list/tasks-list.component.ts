@@ -48,6 +48,10 @@ export class TasksListComponent implements OnInit {
 
   tasks!: I_TASK[];
 
+  completedTasks!: I_TASK[];
+
+  pendingTasks!: I_TASK[];
+
   addForm!: FormGroup;
 
   dtOptions: Config = {};
@@ -84,6 +88,14 @@ export class TasksListComponent implements OnInit {
       (res: any) => {
         this.tasks = res.data.filter(
           (val: I_TASK) => val.created_by === userId
+        );
+        this.completedTasks = res.data.filter(
+          (task: I_TASK) =>
+            task.status === 'COMPLETED' && task.created_by === userId
+        );
+        this.pendingTasks = res.data.filter(
+          (task: I_TASK) =>
+            task.status === 'PENDING' && task.created_by === userId
         );
       },
       (error: Error) => {
