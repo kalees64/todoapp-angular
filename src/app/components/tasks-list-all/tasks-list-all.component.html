@@ -130,21 +130,29 @@
   </div>
 
   <!-- Widgets -->
-  @if(tasks){
+  @if(tasks && tasks.length){
   <div
     class="flex items-center p-2 flex-wrap gap-2 max-sm:flex-col max-sm:justify-center animate-start"
   >
     <div class="t-card w-48 h-28 max-sm:w-96">
       <h2 class="text-xl font-bold text-center">Total Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
-        {{ tasks.length < 10 ? "0" + tasks.length : tasks.length }}
+        {{
+          tasks.length === 0
+            ? "-"
+            : tasks.length < 10
+            ? "0" + tasks.length
+            : tasks.length
+        }}
       </h1>
     </div>
     <div class="t-card w-48 h-28 max-sm:w-96">
       <h2 class="text-xl font-bold text-center">Completed Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
         {{
-          completedTasks.length < 10
+          completedTasks.length === 0
+            ? "-"
+            : completedTasks.length < 10
             ? "0" + completedTasks.length
             : completedTasks.length
         }}
@@ -154,7 +162,9 @@
       <h2 class="text-xl font-bold text-center">Pending Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
         {{
-          pendingTasks.length < 10
+          pendingTasks.length === 0
+            ? "-"
+            : pendingTasks.length < 10
             ? "0" + pendingTasks.length
             : pendingTasks.length
         }}
