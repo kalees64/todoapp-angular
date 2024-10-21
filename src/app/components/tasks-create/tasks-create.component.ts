@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -11,6 +10,7 @@ import {
 import { UserService } from '../../sevices/user.service';
 import { QuillModule } from 'ngx-quill';
 import { SharedModuleModule } from '../../shared-module/shared-module.module';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tasks-create',
@@ -23,9 +23,9 @@ export class TasksCreateComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private toast: ToastrService,
-    private router: Router,
     private fb: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private location: Location
   ) {}
 
   addForm!: FormGroup;
@@ -55,7 +55,7 @@ export class TasksCreateComponent implements OnInit {
         (res: any) => {
           console.log(res.data);
           this.toast.success('Task Added');
-          this.router.navigateByUrl('/tasks');
+          this.location.back();
         },
         (error: Error) => {
           console.log(error);

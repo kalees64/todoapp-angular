@@ -5,12 +5,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TaskService } from '../../sevices/task.service';
 import { UserService } from '../../sevices/user.service';
 import { I_TASK } from '../tasks-list-all/tasks.model';
 import { QuillModule } from 'ngx-quill';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-tasks-edit',
@@ -23,10 +24,10 @@ export class TasksEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
     private toast: ToastrService,
     private taskService: TaskService,
-    private userService: UserService
+    private userService: UserService,
+    private location: Location
   ) {
     this.id = this.route.snapshot.params['id'];
   }
@@ -69,11 +70,7 @@ export class TasksEditComponent implements OnInit {
       (res: any) => {
         console.log(res.data);
         this.toast.success('Task Updated');
-        if (this.userRole === 'ADMIN') {
-          this.router.navigateByUrl('/admin/tasks');
-        } else {
-          this.router.navigateByUrl('/tasks');
-        }
+        this.location.back();
       },
       (error: Error) => {
         console.log(error);
