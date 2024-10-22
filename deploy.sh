@@ -1,5 +1,7 @@
 git pull
 echo -e "\ngit pull successfull!!! \n"
+rm -rf node_modules
+echo -e "node_modules  deleted!!! \n"
 npm install --force
 echo -e  "\nnpm install --force successful!!! \n"
 rm -rf dist
