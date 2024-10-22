@@ -1,10 +1,10 @@
 git pull
 echo -e "\ngit pull successfull!!! \n"
 npm install --force
-echo -e  "npm install --force successful!!! \n"
-cd /todoapp-angular/dist/todoapp/browser/
-rm -rf *
-echo -e "existing build files are removed from /todoapp-angular/dist/todoapp/browser/ successfully!!! \n"
+echo -e  "\nnpm install --force successful!!! \n"
+#cd /todoapp-angular/dist/todoapp/browser/
+#rm -rf *
+#echo -e "existing build files are removed from /todoapp-angular/dist/todoapp/browser/ successfully!!! \n"
 ng build
 echo -e "Build successful!!! \n"
 cd /var/www/projects/root/
