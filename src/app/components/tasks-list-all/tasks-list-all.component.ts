@@ -23,6 +23,8 @@ export class TasksListAllComponent implements OnInit {
 
   tasks!: I_TASK[];
 
+  users!: I_USER[];
+
   completedTasks!: I_TASK[];
 
   pendingTasks!: I_TASK[];
@@ -77,10 +79,12 @@ export class TasksListAllComponent implements OnInit {
 
   completeTask(id: number, task: I_TASK) {
     const completeTask = {
+      ...task,
       name: task.name,
-      created_by: task.created_by,
+      created_by: task.created_by.id,
       status: 'COMPLETED',
       description: task.description,
+      completed_date: new Date().toISOString(),
     };
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
@@ -124,36 +128,57 @@ export class TasksListAllComponent implements OnInit {
   }
 
   onSubmit() {
-    this.startLoading();
     const userId = this.userService.getUserIdFromLocalStorage();
-    console.log(this.addForm.value);
-    this.taskService
-      .addTask({ ...this.addForm.value, created_by: userId })
-      .subscribe(
-        (res: any) => {
-          console.log(res.data);
-          this.stopLoading();
-          this.toast.success('Task Added');
-          this.ngOnInit();
-          this.reloadTable();
-        },
-        (error: Error) => {
-          console.log(error);
-          this.stopLoading();
-          this.toast.error(error.message);
-        }
-      );
+    const newTask = {
+      ...this.addForm.value,
+      created_by: userId,
+      completed_date: '',
+      assigned_date: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+      assigned_to: Number(this.addForm.value['assigned_to']),
+    };
+    console.log(newTask);
+
+    this.startLoading();
+    this.taskService.addTask(newTask).subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.stopLoading();
+        this.toast.success('Task Added');
+        this.ngOnInit();
+        this.reloadTable();
+      },
+      (error: Error) => {
+        console.log(error);
+        this.stopLoading();
+        this.toast.error(error.message);
+      }
+    );
   }
 
   ngOnInit(): void {
     this.fetchTasks();
+
+    this.userService.getAllUsers().subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.users = res.data;
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
 
     this.user = this.userService.getUserFromLocalStorage();
 
     this.addForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(4)]],
       status: ['PENDING'],
-      description: ['', [Validators.required, Validators.minLength(4)]],
+      description: [''],
+      priority: [''],
+      due_date: [''],
+      assigned_to: ['', [Validators.required]],
     });
 
     this.dtOptions = {
@@ -174,5 +199,9 @@ export class TasksListAllComponent implements OnInit {
 
   get description() {
     return this.addForm.controls['description'];
+  }
+
+  get assigned_to() {
+    return this.addForm.controls['assigned_to'];
   }
 }

@@ -46,6 +46,7 @@
       >
         <option disabled>---SELECT---</option>
         <option value="PENDING">PENDING</option>
+        <option value="INPROGRESS">INPROGRESS</option>
         <option value="COMPLETED">COMPLETED</option>
       </select>
       @if(status.errors && status.touched){
@@ -80,6 +81,44 @@
         {{ description.errors["minlength"].requiredLength }} letters</span
       >
       } }
+    </div>
+
+    <div>
+      <label for="priority" class="form-label">Priority</label>
+      <select
+        name="priority"
+        id="priority"
+        class="form-input"
+        formControlName="priority"
+      >
+        <option disabled selected>--SELECT--</option>
+        <option value="LOW">LOW</option>
+        <option value="MEDIUM">MEDIUM</option>
+        <option value="HIGH">HIGH</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="dueDate" class="form-label">Due Date</label>
+      <input
+        type="date"
+        name="dueDate"
+        id="dueDate"
+        class="form-input"
+        formControlName="due_date"
+      />
+    </div>
+
+    <div>
+      <label for="assignedTo" class="form-label">Assigned To</label>
+      <select
+        name="assignedTo"
+        id="assignedTo"
+        class="form-input"
+        formControlName="assigned_to"
+      >
+        <option disabled>--SELECT--</option>
+      </select>
     </div>
 
     <div class="pt-2 d-flex justify-content-center">

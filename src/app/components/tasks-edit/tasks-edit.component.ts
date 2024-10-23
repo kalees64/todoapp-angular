@@ -66,16 +66,45 @@ export class TasksEditComponent implements OnInit {
   }
 
   onSubmit() {
-    this.taskService.updateTask(this.id, this.updateForm.value).subscribe(
-      (res: any) => {
-        console.log(res.data);
-        this.toast.success('Task Updated');
-        this.location.back();
-      },
-      (error: Error) => {
-        console.log(error);
-      }
-    );
+    if (this.updateForm.value['status'] === 'COMPLETED') {
+      const updatedTask = {
+        ...this.updateForm.value,
+        modified_at: new Date().toISOString(),
+        completed_date: new Date().toISOString(),
+        created_by: this.updateForm.value['created_by'].id,
+      };
+
+      console.log(updatedTask);
+
+      this.taskService.updateTask(this.id, updatedTask).subscribe(
+        (res: any) => {
+          console.log(res.data);
+          this.toast.success('Task Updated');
+          this.location.back();
+        },
+        (error: Error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      const updatedTask = {
+        ...this.updateForm.value,
+        modified_at: new Date().toISOString(),
+      };
+
+      console.log(updatedTask);
+
+      this.taskService.updateTask(this.id, updatedTask).subscribe(
+        (res: any) => {
+          console.log(res.data);
+          this.toast.success('Task Updated');
+          this.location.back();
+        },
+        (error: Error) => {
+          console.log(error);
+        }
+      );
+    }
   }
 
   ngOnInit(): void {
@@ -86,6 +115,13 @@ export class TasksEditComponent implements OnInit {
       status: ['', Validators.required],
       description: ['Description', Validators.required],
       created_by: ['', Validators.required],
+      assigned_date: [''],
+      assigned_to: [''],
+      completed_date: [''],
+      created_at: [''],
+      due_date: [''],
+      modified_at: [''],
+      priority: [''],
     });
     this.userRole = this.userService.getUserRoleFromLocalStorage();
   }

@@ -20,6 +20,7 @@ import { QuillModule } from 'ngx-quill';
 
 import 'datatables.net';
 import { Config } from 'datatables.net';
+import { I_USER } from '../register/user.model';
 
 @Component({
   selector: 'app-tasks-list',
@@ -47,6 +48,8 @@ export class TasksListComponent implements OnInit {
   ) {}
 
   tasks!: I_TASK[];
+
+  users!: I_USER[];
 
   completedTasks!: I_TASK[];
 
@@ -106,10 +109,12 @@ export class TasksListComponent implements OnInit {
 
   completeTask(id: number, task: I_TASK) {
     const completeTask = {
+      ...task,
       name: task.name,
-      created_by: task.created_by,
+      created_by: task.created_by.id,
       status: 'COMPLETED',
       description: task.description,
+      completed_date: new Date().toISOString(),
     };
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
@@ -154,33 +159,54 @@ export class TasksListComponent implements OnInit {
 
   onSubmit() {
     const userId = this.userService.getUserIdFromLocalStorage();
-    console.log(this.addForm.value);
+    const newTask = {
+      ...this.addForm.value,
+      created_by: userId,
+      completed_date: '',
+      assigned_date: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+      assigned_to: Number(this.addForm.value['assigned_to']),
+    };
+    console.log(newTask);
+
     this.startLoading();
-    this.taskService
-      .addTask({ ...this.addForm.value, created_by: userId })
-      .subscribe(
-        (res: any) => {
-          this.stopLoading();
-          console.log(res.data);
-          this.toast.success('Task Added');
-          this.ngOnInit();
-          this.reloadTable();
-        },
-        (error: Error) => {
-          console.log(error);
-          this.stopLoading();
-          this.toast.error(error.message);
-        }
-      );
+    this.taskService.addTask(newTask).subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.stopLoading();
+        this.toast.success('Task Added');
+        this.ngOnInit();
+        this.reloadTable();
+      },
+      (error: Error) => {
+        console.log(error);
+        this.stopLoading();
+        this.toast.error(error.message);
+      }
+    );
   }
 
   ngOnInit(): void {
     this.fetchTasks();
 
+    this.userService.getAllUsers().subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.users = res.data;
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
+
     this.addForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(4)]],
       status: ['PENDING'],
-      description: ['', [Validators.required, Validators.minLength(4)]],
+      description: [''],
+      priority: [''],
+      due_date: [''],
+      assigned_to: ['', [Validators.required]],
     });
 
     this.dtOptions = {
@@ -201,5 +227,9 @@ export class TasksListComponent implements OnInit {
 
   get description() {
     return this.addForm.controls['description'];
+  }
+
+  get assigned_to() {
+    return this.addForm.controls['assigned_to'];
   }
 }
