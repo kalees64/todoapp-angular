@@ -229,6 +229,14 @@ export class TasksListComponent implements OnInit {
     return this.addForm.controls['description'];
   }
 
+  get priority() {
+    return this.addForm.controls['priority'];
+  }
+
+  get due_date() {
+    return this.addForm.controls['due_date'];
+  }
+
   get assigned_to() {
     return this.addForm.controls['assigned_to'];
   }

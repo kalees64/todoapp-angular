@@ -42,7 +42,9 @@
             (ngSubmit)="onSubmit()"
           >
             <div>
-              <label for="taskName" class="form-label">Task Name</label>
+              <label for="taskName" class="form-label"
+                >Task Name <span class="text-red-500">*</span></label
+              >
               <input
                 type="text"
                 name="taskName"
@@ -74,7 +76,11 @@
             <div>
               <label for="description" class="form-label">Description</label>
               <quill-editor
-                class="form-input"
+                class="form-input {{
+                  description.valid && description.touched && description.dirty
+                    ? 'valid-input'
+                    : ''
+                }}"
                 formControlName="description"
                 placeholder="Enter the description..."
                 [modules]="editorModules"
@@ -91,7 +97,7 @@
                 type="text"
                 name="taskStatus"
                 id="taskStatus"
-                class="form-input"
+                class="form-input valid-input"
                 value="PENDING"
                 readonly
               />
@@ -99,7 +105,16 @@
 
             <div>
               <label for="priority" class="form-label">Priority</label>
-              <select name="priority" id="priority" class="form-input">
+              <select
+                name="priority"
+                id="priority"
+                class="form-input {{
+                  priority.valid && priority.touched && priority.dirty
+                    ? 'valid-input'
+                    : ''
+                }}"
+                formControlName="priority"
+              >
                 <option disabled selected>--SELECT--</option>
                 <option value="LOW">LOW</option>
                 <option value="MEDIUM">MEDIUM</option>
@@ -113,13 +128,19 @@
                 type="date"
                 name="dueDate"
                 id="dueDate"
-                class="form-input"
+                class="form-input {{
+                  due_date.valid && due_date.touched && due_date.dirty
+                    ? 'valid-input'
+                    : ''
+                }}"
                 formControlName="due_date"
               />
             </div>
 
             <div>
-              <label for="assignedTo" class="form-label">Assigned To</label>
+              <label for="assignedTo" class="form-label"
+                >Assigned To <span class="text-red-500">*</span></label
+              >
               <select
                 name="assignedTo"
                 id="assignedTo"
@@ -128,7 +149,7 @@
                   assigned_to.errors && assigned_to.touched
                     ? 'invalid-input'
                     : assigned_to.valid
-                    ? 'is-valid'
+                    ? 'valid-input'
                     : ''
                 }}"
               >

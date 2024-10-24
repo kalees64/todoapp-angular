@@ -64,6 +64,7 @@ export class TasksListAllComponent implements OnInit {
     this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
         this.tasks = res.data;
+        this.groupByWeek(res.data);
         this.completedTasks = res.data.filter(
           (task: I_TASK) => task.status === 'COMPLETED'
         );
@@ -157,6 +158,48 @@ export class TasksListAllComponent implements OnInit {
     );
   }
 
+  groupByWeek(data: I_TASK[]) {
+    // Convert string dates to Date objects and sort the data
+    const sortedData = data
+      .map((item) => ({
+        ...item,
+        created_at: new Date(item.created_at),
+      }))
+      .sort((a: any, b: any) => a.created_at - b.created_at);
+
+    const groupedData = [];
+    let currentWeek: any = [];
+    let weekStart: any = null;
+
+    sortedData.forEach((item, index) => {
+      const itemDate = item.created_at;
+
+      // Determine the start of the week (Monday)
+      const startOfWeek = new Date(itemDate);
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1); // Adjust to Monday
+
+      // If starting a new week, push the current week to groupedData and reset it
+      if (!weekStart || weekStart.getTime() !== startOfWeek.getTime()) {
+        if (currentWeek.length > 0) {
+          groupedData.push(currentWeek);
+        }
+        currentWeek = [];
+        weekStart = startOfWeek;
+      }
+
+      currentWeek.push(item);
+    });
+
+    // Push the last group if it exists
+    if (currentWeek.length > 0) {
+      groupedData.push(currentWeek);
+    }
+
+    console.log('Group by Week:', groupedData);
+
+    return groupedData;
+  }
+
   ngOnInit(): void {
     this.fetchTasks();
 
@@ -199,6 +242,14 @@ export class TasksListAllComponent implements OnInit {
 
   get description() {
     return this.addForm.controls['description'];
+  }
+
+  get priority() {
+    return this.addForm.controls['priority'];
+  }
+
+  get due_date() {
+    return this.addForm.controls['due_date'];
   }
 
   get assigned_to() {

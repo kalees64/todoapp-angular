@@ -134,6 +134,18 @@ export class TasksEditComponent implements OnInit {
     return this.updateForm.controls['status'];
   }
 
+  get priority() {
+    return this.updateForm.controls['priority'];
+  }
+
+  get assigned_to() {
+    return this.updateForm.controls['assigned_to'];
+  }
+
+  get due_date() {
+    return this.updateForm.controls['due_date'];
+  }
+
   get description() {
     return this.updateForm.controls['description'];
   }
