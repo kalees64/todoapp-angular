@@ -2,10 +2,10 @@ export interface I_TASK {
   id: number;
   name: string;
   status: string;
-  created_by: any;
+  created_by: I_CREATED_BY;
   description: string;
   assigned_date: string;
-  assigned_to: number;
+  assigned_to: I_ASSIGNED_TO;
   completed_date: string;
   created_at: string;
   due_date: string;
@@ -43,6 +43,11 @@ export interface I_UPDATE_TASK {
 }
 
 export interface I_CREATED_BY {
+  id: number;
+  name: string;
+}
+
+export interface I_ASSIGNED_TO {
   id: number;
   name: string;
 }

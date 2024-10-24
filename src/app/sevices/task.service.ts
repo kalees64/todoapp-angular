@@ -22,12 +22,17 @@ export class TaskService {
   }
 
   getTasksWithCreater() {
-    const url = `${this.serverURL}/tasks?fields=id,name,status,description,created_by,created_by.id,created_by.name`;
+    const url = `${this.serverURL}/tasks?fields=id,name,status,description,created_by,created_by.id,created_by.name,created_at,assigned_to,assigned_to.id,assigned_to.name,priority,completed_date,due_date,modified_at,assigned_date`;
     return this.http.get(url);
   }
 
   getTaskBtId(id: number) {
-    const url = `${this.serverURL}/tasks/${id}?fields=id,name,status,description,created_by,created_by.id,created_by.name`;
+    const url = `${this.serverURL}/tasks/${id}`;
+    return this.http.get(url);
+  }
+
+  getTaskBtIdWithCreator(id: number) {
+    const url = `${this.serverURL}/tasks/${id}?fields=id,name,status,description,created_by,created_by.id,created_by.name,created_at,assigned_to,assigned_to.id,assigned_to.name,priority,completed_date,due_date,modified_at,assigned_date`;
     return this.http.get(url);
   }
 

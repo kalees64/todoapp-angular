@@ -126,6 +126,9 @@
         formControlName="assigned_to"
       >
         <option disabled>--SELECT--</option>
+        @for(user of users;track user.id){
+        <option value="{{ user.id }}">{{ user.name }}</option>
+        }
       </select>
       @if(assigned_to.errors && (assigned_to.dirty || assigned_to.touched)){
       @if(assigned_to.errors['required']){

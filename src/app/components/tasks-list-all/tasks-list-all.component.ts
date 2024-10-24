@@ -86,7 +86,10 @@ export class TasksListAllComponent implements OnInit {
       status: 'COMPLETED',
       description: task.description,
       completed_date: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+      assigned_to: task.assigned_to.id,
     };
+    console.log(completeTask);
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
         console.log(res.data);
@@ -133,7 +136,7 @@ export class TasksListAllComponent implements OnInit {
     const newTask = {
       ...this.addForm.value,
       created_by: userId,
-      completed_date: '',
+      completed_date: null,
       assigned_date: new Date().toISOString(),
       created_at: new Date().toISOString(),
       modified_at: new Date().toISOString(),
@@ -216,12 +219,12 @@ export class TasksListAllComponent implements OnInit {
     this.user = this.userService.getUserFromLocalStorage();
 
     this.addForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(4)]],
+      name: [null, [Validators.required, Validators.minLength(4)]],
       status: ['PENDING'],
-      description: [''],
-      priority: [''],
-      due_date: [''],
-      assigned_to: ['', [Validators.required]],
+      description: [null],
+      priority: [null],
+      due_date: [null],
+      assigned_to: [null, [Validators.required]],
     });
 
     this.dtOptions = {

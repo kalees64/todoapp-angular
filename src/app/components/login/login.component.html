@@ -1,9 +1,5 @@
 <main class="w-full p-2 grid justify-center">
-  <form
-    [formGroup]="formData"
-    (ngSubmit)="onSubmit()"
-    class="w-96 max-sm:w-11/12 max-sm-p-1"
-  >
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()" class="w-96 max-sm:w-80">
     <h2 class="text-3xl font-bold">Login</h2>
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Email address</label>

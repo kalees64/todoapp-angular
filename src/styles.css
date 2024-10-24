@@ -151,3 +151,7 @@
 .dataTables_info {
   @apply text-sm text-gray-500;
 }
+
+.table-hover-t > tbody > tr:hover > * {
+  @apply bg-gray-500 text-blue-600 cursor-pointer;
+}

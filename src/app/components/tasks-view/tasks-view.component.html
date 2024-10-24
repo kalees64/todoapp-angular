@@ -1,12 +1,41 @@
 <main class="p-2 pt-4 grid justify-center items-center">
   @if(task){
   <div class="t-card w-96 max-sm:w-11/12 mx-auto">
-    <img src="images/task{{ img }}.png" alt="Task Image" class="rounded-lg" />
+    <div class="relative">
+      <i
+        class="bi bi-arrow-left-circle font-bold text-3xl text-white absolute top-1 left-1 cursor-pointer"
+        (click)="goBack()"
+      ></i>
+      <img src="images/task{{ img }}.png" alt="Task Image" class="rounded-lg" />
+    </div>
     <div class="pt-2">
       <h2 class="text-2xl font-bold">{{ task.name }}</h2>
       <span [innerHTML]="task.description">{{ task.description }}</span>
       <span class="block"><b>Created By</b> : {{ task.created_by.name }}</span>
-      <span class="block pt-1">
+      <span class="block"
+        ><b>Assigned To</b> : {{ task.assigned_to.name }}</span
+      >
+      <span class="block"
+        ><b>Created Date</b> : {{ task.created_at | date }}</span
+      >
+      <span class="block"><b>Due Date</b> : {{ task.due_date | date }}</span>
+      <span class="block"
+        ><b>Priority</b> : &nbsp;
+        <span
+          class="{{
+            task.priority === 'LOW'
+              ? 'vk-badge-yellow'
+              : task.priority === 'HIGH'
+              ? 'vk-badge-red'
+              : task.priority === 'MEDIUM'
+              ? 'vk-badge-lime'
+              : ''
+          }}"
+        >
+          {{ task.priority }}</span
+        ></span
+      >
+      <span class="block">
         <b>Status</b> :
         <span
           class="font-bold {{

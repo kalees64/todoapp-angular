@@ -203,19 +203,19 @@
   <div
     class="flex items-center p-2 flex-wrap gap-2 max-sm:flex-col max-sm:justify-center animate-start"
   >
-    <div class="t-card w-48 h-28 max-sm:w-96">
+    <div class="t-card w-48 h-28 max-sm:w-80">
       <h2 class="text-xl font-bold text-center">Total Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
         {{ tasks.length }}
       </h1>
     </div>
-    <div class="t-card w-48 h-28 max-sm:w-96">
+    <div class="t-card w-48 h-28 max-sm:w-80">
       <h2 class="text-xl font-bold text-center">Completed Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
         {{ completedTasks.length }}
       </h1>
     </div>
-    <div class="t-card w-48 h-28 max-sm:w-96">
+    <div class="t-card w-48 h-28 max-sm:w-80">
       <h2 class="text-xl font-bold text-center">Pending Tasks</h2>
       <h1 class="text-3xl font-bold text-center">
         {{ pendingTasks.length }}
@@ -230,15 +230,21 @@
       id="table"
       datatable
       [dtOptions]="dtOptions"
-      class="table table-auto border"
+      class="w-screen table table-auto border overflow-x-scroll max-xl:text-sm table-hover-t"
       *ngIf="tasks.length > 0"
     >
       <thead>
         <tr class="border">
           <th class="border p-1 px-2 text-start">Sno</th>
           <th class="border p-1 px-2 text-start">Task Name</th>
+          <th class="border p-1 px-2 text-start">Created Date</th>
           <th class="border p-1 px-2 text-start">Created By</th>
+          <th class="border p-1 px-2 text-start">Assigned To</th>
+          <th class="border p-1 px-2 text-start">Assigned Date</th>
           <th class="border p-1 px-2 text-start">Status</th>
+          <th class="border p-1 px-2 text-start">Priority</th>
+          <th class="border p-1 px-2 text-start">Due Date</th>
+          <th class="border p-1 px-2 text-start">Completed Date</th>
           <th class="border p-1 px-2 text-start">Action</th>
         </tr>
       </thead>
@@ -249,11 +255,19 @@
           <td class="border p-1 px-2 text-start" [innerHTML]="task.name">
             {{ task.name }}
           </td>
-
+          <td class="border p-1 px-2 text-start">
+            {{ task.created_at | date }}
+          </td>
           <td class="border p-1 px-2 text-start">
             {{
               task.created_by.name === user.name ? "You" : task.created_by.name
             }}
+          </td>
+          <td class="border p-1 px-2 text-start">
+            {{ task.assigned_to.name }}
+          </td>
+          <td class="border p-1 px-2 text-start">
+            {{ task.assigned_date | date }}
           </td>
           <td class="border p-1 px-2 text-start">
             <app-badge
@@ -266,6 +280,34 @@
               value="{{ task.status }}"
               *ngIf="task.status == 'PENDING'"
             ></app-badge>
+            <app-badge
+              color="blue"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'INPROGRESS'"
+            ></app-badge>
+          </td>
+          <td class="border p-1 px-2 text-start">
+            <app-badge
+              color="yellow"
+              value="{{ task.priority }}"
+              *ngIf="task.priority == 'LOW'"
+            ></app-badge>
+            <app-badge
+              color="green"
+              value="{{ task.priority }}"
+              *ngIf="task.priority == 'MEDIUM'"
+            ></app-badge>
+            <app-badge
+              color="red"
+              value="{{ task.priority }}"
+              *ngIf="task.priority == 'HIGH'"
+            ></app-badge>
+          </td>
+          <td class="border p-1 px-2 text-start">
+            {{ task.due_date | date }}
+          </td>
+          <td class="border p-1 px-2 text-start">
+            {{ task.completed_date | date }}
           </td>
           <td class="border flex items-center gap-2 m-0 p-2">
             <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
@@ -273,7 +315,7 @@
             >
 
             <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info">Edit</a>
-            @if(task.status === 'PENDING'){
+            @if(task.status === 'PENDING'||task.status ==='INPROGRESS'){
             <button
               type="button"
               class="btn-green"

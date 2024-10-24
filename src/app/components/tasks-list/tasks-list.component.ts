@@ -51,6 +51,8 @@ export class TasksListComponent implements OnInit {
 
   users!: I_USER[];
 
+  user!: I_USER;
+
   completedTasks!: I_TASK[];
 
   pendingTasks!: I_TASK[];
@@ -87,18 +89,18 @@ export class TasksListComponent implements OnInit {
 
   fetchTasks() {
     const userId = this.userService.getUserIdFromLocalStorage();
-    this.taskService.getTasks().subscribe(
+    this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
         this.tasks = res.data.filter(
-          (val: I_TASK) => val.created_by === userId
+          (val: I_TASK) => val.created_by.id === userId
         );
         this.completedTasks = res.data.filter(
           (task: I_TASK) =>
-            task.status === 'COMPLETED' && task.created_by === userId
+            task.status === 'COMPLETED' && task.created_by.id === userId
         );
         this.pendingTasks = res.data.filter(
           (task: I_TASK) =>
-            task.status === 'PENDING' && task.created_by === userId
+            task.status === 'PENDING' && task.created_by.id === userId
         );
       },
       (error: Error) => {
@@ -115,7 +117,10 @@ export class TasksListComponent implements OnInit {
       status: 'COMPLETED',
       description: task.description,
       completed_date: new Date().toISOString(),
+      modified_at: new Date().toISOString(),
+      assigned_to: task.assigned_to.id,
     };
+    console.log(completeTask);
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
         console.log(res.data);
@@ -128,7 +133,6 @@ export class TasksListComponent implements OnInit {
       }
     );
   }
-
   deleteTask(id: number, task: I_TASK) {
     console.log(id);
     Swal.fire({
@@ -162,7 +166,7 @@ export class TasksListComponent implements OnInit {
     const newTask = {
       ...this.addForm.value,
       created_by: userId,
-      completed_date: '',
+      completed_date: null,
       assigned_date: new Date().toISOString(),
       created_at: new Date().toISOString(),
       modified_at: new Date().toISOString(),
@@ -200,13 +204,15 @@ export class TasksListComponent implements OnInit {
       }
     );
 
+    this.user = this.userService.getUserFromLocalStorage();
+
     this.addForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(4)]],
+      name: [null, [Validators.required, Validators.minLength(4)]],
       status: ['PENDING'],
-      description: [''],
-      priority: [''],
-      due_date: [''],
-      assigned_to: ['', [Validators.required]],
+      description: [null],
+      priority: [null],
+      due_date: [null],
+      assigned_to: [null, [Validators.required]],
     });
 
     this.dtOptions = {

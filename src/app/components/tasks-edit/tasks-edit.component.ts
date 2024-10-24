@@ -12,6 +12,7 @@ import { UserService } from '../../sevices/user.service';
 import { I_TASK } from '../tasks-list-all/tasks.model';
 import { QuillModule } from 'ngx-quill';
 import { Location } from '@angular/common';
+import { I_USER } from '../register/user.model';
 
 @Component({
   selector: 'app-tasks-edit',
@@ -36,6 +37,7 @@ export class TasksEditComponent implements OnInit {
   task!: I_TASK;
   updateForm!: FormGroup;
   userRole!: string;
+  users!: I_USER[];
 
   editorModules = {
     toolbar: [
@@ -57,7 +59,15 @@ export class TasksEditComponent implements OnInit {
     this.taskService.getTaskBtId(this.id).subscribe(
       (res: any) => {
         this.task = res.data;
-        this.updateForm.patchValue(res.data);
+        if (res.data.due_date !== null) {
+          const taskData = {
+            ...res.data,
+            due_date: res.data.due_date.substring(0, 10),
+          };
+          this.updateForm.patchValue(taskData);
+        } else {
+          this.updateForm.patchValue(res.data);
+        }
       },
       (error: Error) => {
         console.log(error);
@@ -71,7 +81,6 @@ export class TasksEditComponent implements OnInit {
         ...this.updateForm.value,
         modified_at: new Date().toISOString(),
         completed_date: new Date().toISOString(),
-        created_by: this.updateForm.value['created_by'].id,
       };
 
       console.log(updatedTask);
@@ -90,6 +99,7 @@ export class TasksEditComponent implements OnInit {
       const updatedTask = {
         ...this.updateForm.value,
         modified_at: new Date().toISOString(),
+        completed_date: null,
       };
 
       console.log(updatedTask);
@@ -109,19 +119,29 @@ export class TasksEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchTask();
+
+    this.userService.getAllUsers().subscribe(
+      (res: any) => {
+        this.users = res.data;
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
+
     this.updateForm = this.fb.group({
-      id: ['', Validators.required],
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      status: ['', Validators.required],
-      description: ['Description', Validators.required],
-      created_by: ['', Validators.required],
-      assigned_date: [''],
-      assigned_to: [''],
-      completed_date: [''],
-      created_at: [''],
-      due_date: [''],
-      modified_at: [''],
-      priority: [''],
+      id: [null, Validators.required],
+      name: [null, [Validators.required, Validators.minLength(3)]],
+      status: [null, Validators.required],
+      description: [null],
+      created_by: [null, Validators.required],
+      assigned_date: [null],
+      assigned_to: [null],
+      completed_date: [null],
+      created_at: [null],
+      due_date: [null],
+      modified_at: [null],
+      priority: [null],
     });
     this.userRole = this.userService.getUserRoleFromLocalStorage();
   }
