@@ -75,11 +75,7 @@
             <div>
               <label for="description" class="form-label">Description</label>
               <quill-editor
-                class="form-input {{
-                  description.valid && description.touched && description.dirty
-                    ? 'valid-input'
-                    : ''
-                }}"
+                class="h-40"
                 formControlName="description"
                 placeholder="Enter the description..."
                 [modules]="editorModules"
@@ -88,18 +84,6 @@
                 customToolbarPosition="bottom"
               >
               </quill-editor>
-            </div>
-
-            <div>
-              <label for="taskStatus" class="form-label">Status</label>
-              <input
-                type="text"
-                name="taskStatus"
-                id="taskStatus"
-                class="form-input valid-input"
-                value="PENDING"
-                readonly
-              />
             </div>
 
             <div>
@@ -154,7 +138,9 @@
               >
                 <option disabled>--SELECT--</option>
                 @for(user of users;track user.id){
-                <option value="{{ user.id }}">{{ user.name }}</option>
+                <option value="{{ user.id }}">
+                  {{ user.name }} ( {{ user.email }} )
+                </option>
                 }
               </select>
 
@@ -229,62 +215,44 @@
       id="table"
       datatable
       [dtOptions]="dtOptions"
-      class="w-screen table table-auto border overflow-x-scroll max-xl:text-sm table-hover-t"
+      class="w-screen table-t table-auto border overflow-x-scroll max-xl:text-sm table-hover-t"
       *ngIf="tasks.length > 0"
     >
       <thead>
-        <tr class="border">
-          <th class="border p-1 px-2 text-start">Sno</th>
-          <th class="border p-1 px-2 text-start">Task Name</th>
-          <th class="border p-1 px-2 text-start">Created Date</th>
-          <th class="border p-1 px-2 text-start">Created By</th>
-          <th class="border p-1 px-2 text-start">Assigned To</th>
-          <th class="border p-1 px-2 text-start">Assigned Date</th>
-          <th class="border p-1 px-2 text-start">Status</th>
-          <th class="border p-1 px-2 text-start">Priority</th>
-          <th class="border p-1 px-2 text-start">Due Date</th>
-          <th class="border p-1 px-2 text-start">Completed Date</th>
-          <th class="border p-1 px-2 text-start">Action</th>
+        <tr class="border bg-gray-800 text-white">
+          <th class="border border-black p-1 px-2 text-start">Sno</th>
+          <th class="border border-black p-1 px-2 text-start">Task Name</th>
+          <th class="border border-black p-1 px-2 text-start">Description</th>
+          <th class="border border-black p-1 px-2 text-start">Priority</th>
+          <th class="border border-black p-1 px-2 text-start">Due Date</th>
+          <th class="border border-black p-1 px-2 text-start">Assigned To</th>
+          <th class="border border-black p-1 px-2 text-start">Status</th>
+          <th class="border border-black p-1 px-2 text-start">Assigned Date</th>
+          <th class="border border-black p-1 px-2 text-start">
+            Completed Date
+          </th>
+          <th class="border border-black p-1 px-2 text-start">Action</th>
         </tr>
       </thead>
       <tbody>
         @for(task of tasks; track task.id; let i = $index){
-        <tr>
+        <tr
+          class="{{
+            task.due_date < task.created_at ? 'text-red-500 font-bold' : ''
+          }}"
+        >
           <td class="border p-1 px-2 text-start">{{ i + 1 }}</td>
-          <td class="border p-1 px-2 text-start" [innerHTML]="task.name">
-            {{ task.name }}
-          </td>
           <td class="border p-1 px-2 text-start">
-            {{ task.created_at | date }}
+            <a
+              routerLink="/tasks/view/{{ task.id }}"
+              class="no-underline text-inherit"
+              >{{ task.name }}</a
+            >
           </td>
-          <td class="border p-1 px-2 text-start">
-            {{
-              task.created_by.name === user.name ? "You" : task.created_by.name
-            }}
+          <td class="border p-1 px-2 text-start" [innerHTML]="task.description">
+            {{ task.description }}
           </td>
-          <td class="border p-1 px-2 text-start">
-            {{ task.assigned_to.name }}
-          </td>
-          <td class="border p-1 px-2 text-start">
-            {{ task.assigned_date | date }}
-          </td>
-          <td class="border p-1 px-2 text-start">
-            <app-badge
-              color="green"
-              value="{{ task.status }}"
-              *ngIf="task.status == 'COMPLETED'"
-            ></app-badge>
-            <app-badge
-              color="red"
-              value="{{ task.status }}"
-              *ngIf="task.status == 'PENDING'"
-            ></app-badge>
-            <app-badge
-              color="blue"
-              value="{{ task.status }}"
-              *ngIf="task.status == 'INPROGRESS'"
-            ></app-badge>
-          </td>
+
           <td class="border p-1 px-2 text-start">
             <app-badge
               color="yellow"
@@ -302,34 +270,66 @@
               *ngIf="task.priority == 'HIGH'"
             ></app-badge>
           </td>
+
           <td class="border p-1 px-2 text-start">
             {{ task.due_date | date }}
           </td>
+
+          <td class="border p-1 px-2 text-start">
+            {{ task.assigned_to.name }}
+          </td>
+
+          <td class="border p-1 px-2 text-start">
+            <app-badge
+              color="green"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'COMPLETED'"
+            ></app-badge>
+            <app-badge
+              color="red"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'PENDING'"
+            ></app-badge>
+            <app-badge
+              color="blue"
+              value="{{ task.status }}"
+              *ngIf="task.status == 'INPROGRESS'"
+            ></app-badge>
+          </td>
+
+          <td class="border p-1 px-2 text-start">
+            {{ task.assigned_date | date }}
+          </td>
+
           <td class="border p-1 px-2 text-start">
             {{ task.completed_date | date }}
           </td>
-          <td class="border flex items-center gap-2 m-0 p-2">
-            <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
-              >View</a
-            >
+          <td class="border">
+            <div class="flex items-center gap-2 m-0 p-2">
+              <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
+                >View</a
+              >
 
-            <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info">Edit</a>
-            @if(task.status === 'PENDING' || task.status ==='INPROGRESS'){
-            <button
-              type="button"
-              class="btn-green"
-              (click)="completeTask(task.id, task)"
-            >
-              Mark as completed
-            </button>
-            }
-            <button
-              type="button"
-              class="btn-red"
-              (click)="deleteTask(task.id, task)"
-            >
-              Delete
-            </button>
+              <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info"
+                >Edit</a
+              >
+              @if(task.status === 'PENDING' || task.status ==='INPROGRESS'){
+              <button
+                type="button"
+                class="btn-green"
+                (click)="completeTask(task.id, task)"
+              >
+                Mark as completed
+              </button>
+              }
+              <button
+                type="button"
+                class="btn-red"
+                (click)="deleteTask(task.id, task)"
+              >
+                Delete
+              </button>
+            </div>
           </td>
         </tr>
         }

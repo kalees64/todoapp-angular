@@ -92,7 +92,8 @@ export class TasksListComponent implements OnInit {
     this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
         this.tasks = res.data.filter(
-          (val: I_TASK) => val.created_by.id === userId
+          (val: I_TASK) =>
+            val.created_by.id === userId || val.assigned_to.id === userId
         );
         this.completedTasks = res.data.filter(
           (task: I_TASK) =>

@@ -5,6 +5,78 @@
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2"
   >
     <div class="flex items-center gap-2">
+      <div *ngIf="user() && user().role === 'ADMIN'">
+        <button
+          class="text-white"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasExample"
+          aria-controls="offcanvasExample"
+        >
+          <i class="bi bi-list text-xl"></i>
+        </button>
+
+        <div
+          class="offcanvas offcanvas-start"
+          tabindex="-1"
+          id="offcanvasExample"
+          aria-labelledby="offcanvasExampleLabel"
+          style="width: 300px"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title ps-7" id="offcanvasExampleLabel">
+              Admin
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="offcanvas-body flex flex-col justify-between">
+            <div class="grid p-3">
+              <a
+                routerLink="/home"
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 no-underline font-bold text-black"
+              >
+                <i class="bi bi-house-fill"></i>
+                <span>Home</span>
+              </a>
+              <a
+                routerLink="/tasks"
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 no-underline font-bold text-black"
+              >
+                <i class="bi bi-list-task"></i>
+                <span>Your Tasks</span>
+              </a>
+              <a
+                routerLink="/admin/tasks"
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 no-underline font-bold text-black"
+              >
+                <i class="bi bi-collection-fill"></i>
+                <span>All Tasks</span>
+              </a>
+              <a
+                routerLink="/profile/{{ user().id }}"
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 no-underline font-bold text-black"
+              >
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+              </a>
+            </div>
+            <div class="flex w-full justify-end">
+              <button
+                (click)="confirmLogout()"
+                class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 no-underline font-bold text-black vk-btn-red-g"
+              >
+                <i class="bi bi-box-arrow-right text-white"></i>
+                <span class="text-white">Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <a routerLink="/" class="no-underline rtl:space-x-reverse">
         <span
           class="self-center text-white text-xl font-semibold whitespace-nowrap dark:text-white"
@@ -33,6 +105,7 @@
               >Tasks</a
             >
           </li>
+
           @if(user().role === 'ADMIN'){
           <li>
             <a
@@ -50,7 +123,14 @@
     <div class="flex items-center justify-between gap-2">
       @if(user()){
       <div class="flex items-center gap-2">
-        <span class="text-white">Welcome {{ user().name }}!</span>
+        <span class="text-white"
+          >Welcome
+          <a
+            routerLink="/profile/{{ user().id }}"
+            class="text-white no-underline"
+            >{{ user().name }}</a
+          >!</span
+        >
 
         <button type="button" class="btn-styled" (click)="confirmLogout()">
           Logout
@@ -115,6 +195,7 @@
             >Tasks</a
           >
         </li>
+
         @if(user().role === 'ADMIN'){
         <li>
           <a
@@ -126,6 +207,8 @@
         </li>
         } }
       </ul>
+
+      <!-- drawer init and toggle -->
     </div>
   </div>
 </nav>

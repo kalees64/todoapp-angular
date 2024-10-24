@@ -74,6 +74,11 @@ export class UserService {
     return this.http.get(url);
   }
 
+  getUserById(id: number) {
+    const url = `${this.serverURL}/users/${id}`;
+    return this.http.get(url);
+  }
+
   addUser(user: I_NEW_USER) {
     const url = `${this.serverURL}/users`;
     return this.http.post(url, user);

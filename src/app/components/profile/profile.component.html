@@ -1,0 +1,72 @@
+<section class="grid p-6">
+  <div
+    class="grid-cols-1 w-8/12 max-sm:w-80 mx-auto bg-white border rounded-lg shadow"
+  >
+    <div class="p-6 pb-0">
+      <h3 class="text-xl font-bold">User Profile</h3>
+    </div>
+    <hr />
+    @if(user){
+    <form class="p-6 pt-0 grid grid-cols-1 gap-2">
+      <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-2">
+        <div>
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-input"
+            value="{{ user.name }}"
+            readonly
+          />
+        </div>
+        <div>
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            value="{{ user.email }}"
+            readonly
+          />
+        </div>
+      </div>
+      <div>
+        <label for="role" class="form-label">Role</label>
+        <input
+          type="text"
+          id="role"
+          name="role"
+          class="form-input"
+          value="{{ user.role }}"
+          readonly
+        />
+      </div>
+      <div>
+        <label for="workingHours" class="form-label">Working Hours</label>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 gap-2">
+            <label for="startTime" class="form-label">Start Time : </label>
+            <input
+              type="time"
+              name="startTime"
+              id="startTime"
+              class="form-input"
+            />
+          </div>
+          <div class="grid grid-cols-1 gap-2">
+            <label for="endTime" class="form-label">End Time : </label>
+            <input type="time" name="endTime" id="endTime" class="form-input" />
+          </div>
+        </div>
+      </div>
+      <div
+        class="grid grid-cols-9 gap-2 max-lg:grid-cols-6 max-xl:grid-cols-8 max-md:grid-cols-4 max-sm:grid-cols-2"
+      >
+        <button type="submit" class="vk-btn-green-g" disabled>Save</button>
+      </div>
+    </form>
+    }
+  </div>
+</section>

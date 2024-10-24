@@ -153,5 +153,9 @@
 }
 
 .table-hover-t > tbody > tr:hover > * {
-  @apply bg-gray-500 text-blue-600 cursor-pointer;
+  @apply bg-gray-100 text-blue-600 cursor-pointer;
+}
+
+.table-t {
+  @apply table;
 }
