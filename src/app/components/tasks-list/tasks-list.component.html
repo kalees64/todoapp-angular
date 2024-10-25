@@ -236,11 +236,7 @@
       </thead>
       <tbody>
         @for(task of tasks; track task.id; let i = $index){
-        <tr
-          class="{{
-            task.due_date < task.created_at ? 'text-red-500 font-bold' : ''
-          }}"
-        >
+        <tr class="{{ task.due_date < today ? 'text-red-500 font-bold' : '' }}">
           <td class="border p-1 px-2 text-start">{{ i + 1 }}</td>
           <td class="border p-1 px-2 text-start">
             <a

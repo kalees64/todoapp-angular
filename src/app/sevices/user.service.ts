@@ -83,4 +83,9 @@ export class UserService {
     const url = `${this.serverURL}/users`;
     return this.http.post(url, user);
   }
+
+  updateUser(id: number, user: I_USER) {
+    const url = `${this.serverURL}/users/${id}`;
+    return this.http.patch(url, user);
+  }
 }

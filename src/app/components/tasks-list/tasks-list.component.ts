@@ -45,13 +45,17 @@ export class TasksListComponent implements OnInit {
     private toast: ToastrService,
     private userService: UserService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.today = new Date().toISOString();
+  }
 
   tasks!: I_TASK[];
 
   users!: I_USER[];
 
   user!: I_USER;
+
+  today = new Date().toISOString();
 
   completedTasks!: I_TASK[];
 

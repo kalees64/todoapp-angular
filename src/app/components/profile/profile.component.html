@@ -7,7 +7,11 @@
     </div>
     <hr />
     @if(user){
-    <form class="p-6 pt-0 grid grid-cols-1 gap-2">
+    <form
+      class="p-6 pt-0 grid grid-cols-1 gap-2"
+      [formGroup]="userForm"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-2">
         <div>
           <label for="name" class="form-label">Name</label>
@@ -15,10 +19,24 @@
             type="text"
             id="name"
             name="name"
-            class="form-input"
-            value="{{ user.name }}"
-            readonly
+            class="form-input {{
+              name.touched && name.invalid
+                ? 'invalid-input'
+                : name.valid
+                ? 'valid-input'
+                : ''
+            }}"
+            formControlName="name"
           />
+          @if(name.errors && (name.touched || name.dirty)){
+          @if(name.errors['required']){
+          <span class="text-red-500">Name is required</span>
+          } @if(name.errors['minlength']){
+          <span class="text-red-500"
+            >Name must contains minumum
+            {{ name.errors["minlength"].requiredLength }} letters</span
+          >
+          } }
         </div>
         <div>
           <label for="email" class="form-label">Email</label>
@@ -26,22 +44,45 @@
             type="email"
             id="email"
             name="email"
-            class="form-input"
-            value="{{ user.email }}"
-            readonly
+            class="form-input {{
+              email.touched && email.invalid
+                ? 'invalid-input'
+                : email.valid
+                ? 'valid-input'
+                : ''
+            }}"
+            formControlName="email"
           />
+          @if(email.errors && (email.touched || email.dirty)){
+          @if(email.errors['required']){
+          <span class="text-red-500">Email is required</span>
+          } @if(email.errors['email']){
+          <span class="text-red-500">Enter Valid email</span>
+          } }
         </div>
       </div>
       <div>
         <label for="role" class="form-label">Role</label>
-        <input
-          type="text"
-          id="role"
+        <select
           name="role"
-          class="form-input"
-          value="{{ user.role }}"
-          readonly
-        />
+          id="role"
+          class="form-input {{
+            role.touched && role.invalid
+              ? 'invalid-input'
+              : role.valid
+              ? 'valid-input'
+              : ''
+          }}"
+          formControlName="role"
+        >
+          <option disabled>--SELECT--</option>
+          <option value="USER">USER</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+        @if(role.errors && (role.touched || role.dirty)){
+        @if(role.errors['required']){
+        <span class="text-red-500">Email is required</span>
+        } }
       </div>
       <div>
         <label for="workingHours" class="form-label">Working Hours</label>
@@ -53,18 +94,31 @@
               name="startTime"
               id="startTime"
               class="form-input"
+              formControlName="work_start_time"
             />
           </div>
           <div class="grid grid-cols-1 gap-2">
             <label for="endTime" class="form-label">End Time : </label>
-            <input type="time" name="endTime" id="endTime" class="form-input" />
+            <input
+              type="time"
+              name="endTime"
+              id="endTime"
+              class="form-input"
+              formControlName="work_end_time"
+            />
           </div>
         </div>
       </div>
       <div
         class="grid grid-cols-9 gap-2 max-lg:grid-cols-6 max-xl:grid-cols-8 max-md:grid-cols-4 max-sm:grid-cols-2"
       >
-        <button type="submit" class="vk-btn-green-g" disabled>Save</button>
+        <button
+          type="submit"
+          class="vk-btn-green-g"
+          [disabled]="userForm.invalid"
+        >
+          Save
+        </button>
       </div>
     </form>
     }
