@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../sevices/user.service';
 import { DataTablesModule } from 'angular-datatables';
-import { BadgeComponent } from '../ui/badge/badge.component';
+// import { BadgeComponent } from '../ui/badge/badge.component';
 import { I_TASK } from '../tasks-list-all/tasks.model';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
@@ -17,6 +17,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
+import {
+  ButtonComponent,
+  CardComponent,
+  BadgeComponent,
+} from '@kalees64/tw-theme';
 
 import 'datatables.net';
 import { Config } from 'datatables.net';
@@ -35,6 +40,8 @@ import { I_USER } from '../register/user.model';
     TasksCreateComponent,
     ReactiveFormsModule,
     QuillModule,
+    ButtonComponent,
+    CardComponent,
   ],
   templateUrl: './tasks-list.component.html',
   styles: ``,
@@ -201,8 +208,9 @@ export class TasksListComponent implements OnInit {
 
     this.userService.getAllUsers().subscribe(
       (res: any) => {
+        const userId = this.userService.getUserIdFromLocalStorage();
         console.log(res.data);
-        this.users = res.data;
+        this.users = res.data.filter((val: I_USER) => val.id !== userId);
       },
       (error: Error) => {
         console.log(error);
@@ -252,3 +260,24 @@ export class TasksListComponent implements OnInit {
     return this.addForm.controls['assigned_to'];
   }
 }
+
+export const data = {
+  size: 'medium',
+  data: [
+    {
+      label: 'Total Tasks',
+      value: 10,
+      color: 'primary',
+    },
+    {
+      label: 'Completed Tasks',
+      value: 10,
+      color: 'danger',
+    },
+    {
+      label: 'Pending Tasks',
+      value: 10,
+      color: 'secondary',
+    },
+  ],
+};

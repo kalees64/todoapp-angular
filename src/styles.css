@@ -1,3 +1,5 @@
+@import "../node_modules/@kalees64/tw-theme/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

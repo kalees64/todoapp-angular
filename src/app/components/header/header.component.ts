@@ -5,11 +5,18 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
+import { HeaderComponent as ThemeHeader } from '@kalees64/tw-theme';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, SweetAlert2Module],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    SweetAlert2Module,
+    ThemeHeader,
+  ],
   templateUrl: './header.component.html',
   styles: ``,
 })

@@ -212,8 +212,9 @@ export class TasksListAllComponent implements OnInit {
 
     this.userService.getAllUsers().subscribe(
       (res: any) => {
+        const userId = this.userService.getUserIdFromLocalStorage();
         console.log(res.data);
-        this.users = res.data;
+        this.users = res.data.filter((val: I_USER) => val.id !== userId);
       },
       (error: Error) => {
         console.log(error);

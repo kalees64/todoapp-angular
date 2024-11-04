@@ -5,14 +5,21 @@
       All Tasks @if(tasks){({{ tasks.length }})}
     </h2>
 
-    <button
+    <!-- <button
       data-bs-toggle="modal"
       data-bs-target="#exampleModal"
       class="btn-blue"
       type="button"
     >
       Create Task
-    </button>
+    </button> -->
+
+    <tw-button
+      label="Create Task"
+      variant="primary"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+    ></tw-button>
   </div>
 
   <!-- Main modal -->
@@ -160,10 +167,17 @@
 
             <div class="pt-2 d-flex justify-content-center">
               <div class="modal-footer">
-                <button type="reset" class="btn-info text-white">Reset</button>
+                <!-- <button type="reset" class="btn-info text-white">Reset</button> -->
+
+                <tw-button
+                  label="Reset"
+                  type="reset"
+                  variant="info"
+                ></tw-button>
+
                 <button
                   type="submit"
-                  class="btn-blue flex gap-2 items-center  {{
+                  class="sp-btn-success flex gap-2 items-center  {{
                     addForm.invalid ? 'cursor-not-allowed' : ' cursor-pointer'
                   }}"
                   [disabled]="name.invalid || assigned_to.invalid || isLoading"
@@ -172,10 +186,26 @@
                   <span
                     class="size-5 border-4 border-gray-400 border-t-white rounded-full animate-spin"
                   ></span>
-                  } Add Task</button
-                ><button type="button" class="btn-red" data-bs-dismiss="modal">
-                  Close
+                  } Add Task
                 </button>
+
+                <!-- <tw-button
+                  label="Add Task"
+                  type="submit"
+                  variant="success"
+                  disabled="name.invalid || assigned_to.invalid || isLoading"
+                ></tw-button> -->
+
+                <!-- <button type="button" class="btn-red" data-bs-dismiss="modal">
+                  Close
+                </button> -->
+
+                <tw-button
+                  label="Close"
+                  type="button"
+                  data-bs-dismiss="modal"
+                  variant="danger"
+                ></tw-button>
               </div>
             </div>
           </form>
@@ -186,7 +216,7 @@
 
   <!-- Widgets -->
   @if(tasks){
-  <div
+  <!-- <div
     class="flex items-center p-2 flex-wrap gap-2 max-sm:flex-col max-sm:justify-center animate-start"
   >
     <div class="t-card w-48 h-28 max-sm:w-80">
@@ -207,8 +237,32 @@
         {{ pendingTasks.length }}
       </h1>
     </div>
-  </div>
-  }
+  </div> -->
+
+  <tw-card-widgets
+    classes="grid grid-cols-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 max-xl:grid-cols-5 gap-2 pt-2"
+    [data]="{
+  size: 'medium',
+  data: [
+    {
+      label: 'Total Tasks',
+      value: tasks.length,
+      color: 'default',
+    },
+    {
+      label: 'Completed Tasks',
+      value: completedTasks.length,
+      color: 'default',
+    },
+    {
+      label: 'Pending Tasks',
+      value: pendingTasks.length,
+      color: 'default',
+    },
+  ],
+}"
+  ></tw-card-widgets
+  >}
 
   <div class="">
     @if(tasks){
@@ -277,7 +331,7 @@
           </td>
 
           <td class="border p-1 px-2 text-start">
-            <app-badge
+            <!-- <app-badge
               color="green"
               value="{{ task.status }}"
               *ngIf="task.status == 'COMPLETED'"
@@ -291,7 +345,23 @@
               color="blue"
               value="{{ task.status }}"
               *ngIf="task.status == 'INPROGRESS'"
-            ></app-badge>
+            ></app-badge> -->
+
+            <sp-badge
+              label="{{ task.status }}"
+              variant="success"
+              *ngIf="task.status == 'COMPLETED'"
+            ></sp-badge>
+            <sp-badge
+              label="{{ task.status }}"
+              variant="danger"
+              *ngIf="task.status == 'PENDING'"
+            ></sp-badge>
+            <sp-badge
+              label="{{ task.status }}"
+              variant="primary"
+              *ngIf="task.status == 'INPROGRESS'"
+            ></sp-badge>
           </td>
 
           <td class="border p-1 px-2 text-start">
@@ -311,21 +381,33 @@
                 >Edit</a
               > -->
               @if(task.status === 'PENDING' || task.status ==='INPROGRESS'){
-              <button
+              <!-- <button
                 type="button"
                 class="btn-green"
                 (click)="completeTask(task.id, task)"
               >
                 Mark as completed
-              </button>
+              </button> -->
+
+              <tw-button
+                label="Mark as completed"
+                variant="success"
+                (click)="completeTask(task.id, task)"
+              ></tw-button>
               }
-              <button
+              <!-- <button
                 type="button"
                 class="btn-red"
                 (click)="deleteTask(task.id, task)"
               >
                 Delete
-              </button>
+              </button> -->
+
+              <tw-button
+                label="Delete"
+                variant="danger"
+                (click)="deleteTask(task.id, task)"
+              ></tw-button>
             </div>
           </td>
         </tr>
