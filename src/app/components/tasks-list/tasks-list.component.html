@@ -86,7 +86,7 @@
               </quill-editor>
             </div>
 
-            <div>
+            <!-- <div>
               <label for="priority" class="form-label">Priority</label>
               <select
                 name="priority"
@@ -103,9 +103,9 @@
                 <option value="MEDIUM">MEDIUM</option>
                 <option value="HIGH">HIGH</option>
               </select>
-            </div>
+            </div> -->
 
-            <div>
+            <!-- <div>
               <label for="dueDate" class="form-label">Due Date</label>
               <input
                 type="date"
@@ -118,7 +118,7 @@
                 }}"
                 formControlName="due_date"
               />
-            </div>
+            </div> -->
 
             <div>
               <label for="assignedTo" class="form-label"
@@ -223,8 +223,8 @@
           <th class="border border-black p-1 px-2 text-start">Sno</th>
           <th class="border border-black p-1 px-2 text-start">Task Name</th>
           <!-- <th class="border border-black p-1 px-2 text-start">Description</th> -->
-          <th class="border border-black p-1 px-2 text-start">Priority</th>
-          <th class="border border-black p-1 px-2 text-start">Due Date</th>
+          <!-- <th class="border border-black p-1 px-2 text-start">Priority</th> -->
+          <!-- <th class="border border-black p-1 px-2 text-start">Due Date</th> -->
           <th class="border border-black p-1 px-2 text-start">Assigned To</th>
           <th class="border border-black p-1 px-2 text-start">Status</th>
           <th class="border border-black p-1 px-2 text-start">Assigned Date</th>
@@ -249,7 +249,7 @@
             {{ task.description }}
           </td> -->
 
-          <td class="border p-1 px-2 text-start">
+          <!-- <td class="border p-1 px-2 text-start">
             <app-badge
               color="yellow"
               value="{{ task.priority }}"
@@ -265,11 +265,11 @@
               value="{{ task.priority }}"
               *ngIf="task.priority == 'HIGH'"
             ></app-badge>
-          </td>
+          </td> -->
 
-          <td class="border p-1 px-2 text-start">
+          <!-- <td class="border p-1 px-2 text-start">
             {{ task.due_date | date }}
-          </td>
+          </td> -->
 
           <td class="border p-1 px-2 text-start">
             {{ task.assigned_to.name }}
@@ -302,13 +302,13 @@
           </td>
           <td class="border">
             <div class="flex items-center gap-2 m-0 p-2">
-              <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
+              <!-- <a routerLink="/tasks/view/{{ task.id }}" class="btn-purple"
                 >View</a
-              >
+              > -->
 
-              <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info"
+              <!-- <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info"
                 >Edit</a
-              >
+              > -->
               @if(task.status === 'PENDING' || task.status ==='INPROGRESS'){
               <button
                 type="button"

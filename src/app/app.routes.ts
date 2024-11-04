@@ -15,10 +15,10 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
   },
-  {
-    path: 'register',
-    component: RegisterComponent,
-  },
+  // {
+  //   path: 'register',
+  //   component: RegisterComponent,
+  // },
   {
     path: 'login',
     component: LoginComponent,
@@ -35,16 +35,16 @@ export const routes: Routes = [
         component: TasksListComponent,
         canActivate: [authGuard],
       },
-      {
-        path: 'view/:id',
-        component: TasksViewComponent,
-        canActivate: [authGuard],
-      },
-      {
-        path: 'edit/:id',
-        component: TasksEditComponent,
-        canActivate: [authGuard],
-      },
+      // {
+      //   path: 'view/:id',
+      //   component: TasksViewComponent,
+      //   canActivate: [authGuard],
+      // },
+      // {
+      //   path: 'edit/:id',
+      //   component: TasksEditComponent,
+      //   canActivate: [authGuard],
+      // },
     ],
   },
   {
