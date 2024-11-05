@@ -37,6 +37,8 @@ export class TasksListAllComponent implements OnInit {
 
   addForm!: FormGroup;
 
+  imagePreview: string | ArrayBuffer | null = null;
+
   dtOptions: Config = {};
 
   editorModules = {
@@ -183,6 +185,20 @@ export class TasksListAllComponent implements OnInit {
     });
   }
 
+  onUpload(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.addForm.patchValue({ image: file });
+      this.addForm.get('image')?.updateValueAndValidity();
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result; // Store the dataURL in imagePreview
+      };
+      reader.readAsDataURL(file); // Convert file to dataURL
+    }
+  }
+
   onSubmit() {
     const userId = this.userService.getUserIdFromLocalStorage();
     const newTask = {
@@ -193,24 +209,52 @@ export class TasksListAllComponent implements OnInit {
       created_at: new Date().toISOString(),
       modified_at: new Date().toISOString(),
       assigned_to: Number(this.addForm.value['assigned_to']),
+      // image: this.addForm.get('image')?.value,
+      // image: this.imagePreview,
+      // image: '8d2c96a4-bad3-4f81-bb8a-0830ed560152',
     };
-    console.log(newTask);
+    // console.log(newTask);
+
+    const formData = new FormData();
+    formData.append('file', this.addForm.get('image')?.value);
 
     this.startLoading();
-    this.taskService.addTask(newTask).subscribe(
+
+    this.taskService.uploadImage(formData).subscribe(
       (res: any) => {
-        console.log(res.data);
-        this.stopLoading();
-        this.toast.success('Task Added');
-        this.ngOnInit();
-        this.reloadTable();
+        console.log(res);
+        const newTask = {
+          ...this.addForm.value,
+          created_by: userId,
+          completed_date: null,
+          assigned_date: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          modified_at: new Date().toISOString(),
+          assigned_to: Number(this.addForm.value['assigned_to']),
+          image: res.data.id,
+        };
+        console.log(newTask);
+        this.taskService.addTask(newTask).subscribe(
+          (res: any) => {
+            console.log(res.data);
+            this.stopLoading();
+            this.toast.success('Task Added');
+            this.ngOnInit();
+            this.reloadTable();
+          },
+          (error: Error) => {
+            console.log(error);
+            this.stopLoading();
+            this.toast.error(error.message);
+          }
+        );
       },
       (error: Error) => {
         console.log(error);
-        this.stopLoading();
-        this.toast.error(error.message);
       }
     );
+
+    // console.log(formData);
   }
 
   groupByWeek(data: I_TASK[]) {
@@ -278,6 +322,7 @@ export class TasksListAllComponent implements OnInit {
       priority: [null],
       due_date: [null],
       assigned_to: [null, [Validators.required]],
+      image: [null],
     });
 
     this.dtOptions = {

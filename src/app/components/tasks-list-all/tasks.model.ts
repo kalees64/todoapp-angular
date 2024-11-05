@@ -11,6 +11,7 @@ export interface I_TASK {
   due_date: string;
   modified_at: string;
   priority: string;
+  image?: any;
 }
 
 export interface I_ADD_TASK {
@@ -25,6 +26,7 @@ export interface I_ADD_TASK {
   due_date: string;
   modified_at: string;
   priority: string;
+  image?: any;
 }
 
 export interface I_UPDATE_TASK {
@@ -40,6 +42,7 @@ export interface I_UPDATE_TASK {
   due_date?: string;
   modified_at?: string;
   priority?: string;
+  image?: any;
 }
 
 export interface I_CREATED_BY {

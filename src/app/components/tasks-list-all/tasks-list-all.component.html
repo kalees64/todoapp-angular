@@ -94,6 +94,16 @@
               </quill-editor>
             </div>
 
+            <div>
+              <label for="image">Attachments</label>
+              <input
+                type="file"
+                name="image"
+                id="image"
+                (change)="onUpload($event)"
+              />
+            </div>
+
             <!-- <div>
               <label for="priority" class="form-label">Priority</label>
               <select

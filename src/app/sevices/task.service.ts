@@ -32,11 +32,11 @@ export class TaskService {
   }
 
   getTaskBtIdWithCreator(id: number) {
-    const url = `${this.serverURL}/tasks/${id}?fields=id,name,status,description,created_by,created_by.id,created_by.name,created_at,assigned_to,assigned_to.id,assigned_to.name,priority,completed_date,due_date,modified_at,assigned_date`;
+    const url = `${this.serverURL}/tasks/${id}?fields=id,name,status,description,created_by,created_by.id,created_by.name,created_at,assigned_to,assigned_to.id,assigned_to.name,priority,completed_date,due_date,modified_at,assigned_date,image`;
     return this.http.get(url);
   }
 
-  addTask(task: I_ADD_TASK) {
+  addTask(task: any) {
     const url = `${this.serverURL}/tasks`;
     return this.http.post(url, task);
   }
@@ -49,5 +49,15 @@ export class TaskService {
   deleteTask(id: number) {
     const url = `${this.serverURL}/tasks/${id}`;
     return this.http.delete(url);
+  }
+
+  uploadImage(image: any) {
+    const url = `https://cms.krudraksha.com/files`;
+    return this.http.post(url, image);
+  }
+
+  getImage(id: string) {
+    const url = `https://cms.krudraksha.com/assets/${id}`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 }

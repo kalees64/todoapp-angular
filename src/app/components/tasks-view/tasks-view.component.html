@@ -66,6 +66,7 @@
   }
 </main> -->
 
+@if(task){
 <main class="w-full h-full p-2">
   <h2 class="max-lg:px-10 px-14 max-sm:px-6">{{ task.name }}</h2>
   <div class="flex max-lg:flex-col justify-center gap-2 pt-2">
@@ -73,6 +74,9 @@
       <label class="font-bold">Description</label>
       <hr />
       <p [innerHTML]="task.description">{{ task.description }}</p>
+      <div>
+        <img src="{{ imgURL }}" alt="Image" />
+      </div>
     </div>
     <div class="w-4/12 border p-2 rounded max-lg:w-11/12 max-lg:mx-auto">
       <div class="grid pb-1">
@@ -92,7 +96,7 @@
           >{{ task.status }}</span
         >
       </div>
-      <div class="grid pb-1">
+      <!-- <div class="grid pb-1">
         <label class="font-bold pb-1">Priority</label>
         <span
           class="w-16 text-center {{
@@ -106,16 +110,16 @@
           }}"
           >{{ task.priority }}</span
         >
-      </div>
+      </div> -->
       <div class="grid pb-1">
         <label class="font-bold pb-1">Created Date</label>
         <span>{{ task.created_at | date }}</span>
       </div>
-      <div class="grid pb-1">
+      <!-- <div class="grid pb-1">
         <label class="font-bold pb-1">Due Date</label>
         <span>{{ task.due_date | date }}</span>
-      </div>
-      <div class="grid pb-1">
+      </div> -->
+      <!-- <div class="grid pb-1">
         <label class="font-bold pb-1">Action</label>
         <div class="pt-1 space-x-2">
           <a
@@ -134,7 +138,8 @@
           </button>
           }
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </main>
+}
