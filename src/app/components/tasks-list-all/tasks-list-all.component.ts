@@ -82,6 +82,54 @@ export class TasksListAllComponent implements OnInit {
     );
   }
 
+  fixTask(id: number, task: I_TASK) {
+    const completeTask = {
+      ...task,
+      name: task.name,
+      created_by: task.created_by.id,
+      status: 'INPROGRESS',
+      description: task.description,
+      modified_at: new Date().toISOString(),
+      assigned_to: task.assigned_to.id,
+    };
+    console.log(completeTask);
+    this.taskService.updateTask(id, completeTask).subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.toast.info('Task Fixed');
+        this.ngOnInit();
+      },
+      (error: Error) => {
+        console.log(error);
+        this.toast.error(error.message);
+      }
+    );
+  }
+
+  reOpenTask(id: number, task: I_TASK) {
+    const completeTask = {
+      ...task,
+      name: task.name,
+      created_by: task.created_by.id,
+      status: 'PENDING',
+      description: task.description,
+      modified_at: new Date().toISOString(),
+      assigned_to: task.assigned_to.id,
+    };
+    console.log(completeTask);
+    this.taskService.updateTask(id, completeTask).subscribe(
+      (res: any) => {
+        console.log(res.data);
+        this.toast.info('Task Reopened');
+        this.ngOnInit();
+      },
+      (error: Error) => {
+        console.log(error);
+        this.toast.error(error.message);
+      }
+    );
+  }
+
   completeTask(id: number, task: I_TASK) {
     const completeTask = {
       ...task,
@@ -97,7 +145,7 @@ export class TasksListAllComponent implements OnInit {
     this.taskService.updateTask(id, completeTask).subscribe(
       (res: any) => {
         console.log(res.data);
-        this.toast.success('Task Completed');
+        this.toast.success('Task Closed');
         this.ngOnInit();
       },
       (error: Error) => {

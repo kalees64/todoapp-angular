@@ -348,17 +348,17 @@
             ></app-badge> -->
 
             <sp-badge
-              label="{{ task.status }}"
+              label="Closed"
               variant="success"
               *ngIf="task.status == 'COMPLETED'"
             ></sp-badge>
             <sp-badge
-              label="{{ task.status }}"
+              label="Pending"
               variant="danger"
               *ngIf="task.status == 'PENDING'"
             ></sp-badge>
             <sp-badge
-              label="{{ task.status }}"
+              label="Fixed"
               variant="primary"
               *ngIf="task.status == 'INPROGRESS'"
             ></sp-badge>
@@ -380,7 +380,13 @@
               <!-- <a routerLink="/tasks/edit/{{ task.id }}" class="btn-info"
                 >Edit</a
               > -->
-              @if(task.status === 'PENDING' || task.status ==='INPROGRESS'){
+              @if(task.status === 'PENDING'){
+              <tw-button
+                label="Fixed"
+                variant="primary"
+                (click)="fixTask(task.id, task)"
+              ></tw-button>
+              } @if(task.status ==='INPROGRESS'){
               <!-- <button
                 type="button"
                 class="btn-green"
@@ -390,11 +396,17 @@
               </button> -->
 
               <tw-button
-                label="Mark as completed"
+                label="Reopen"
                 variant="success"
+                (click)="reOpenTask(task.id, task)"
+              ></tw-button>
+
+              <tw-button
+                label="Close"
+                variant="danger"
                 (click)="completeTask(task.id, task)"
               ></tw-button>
-              }
+              } @if(task.status ==='COMPLETED'){
               <!-- <button
                 type="button"
                 class="btn-red"
@@ -408,6 +420,7 @@
                 variant="danger"
                 (click)="deleteTask(task.id, task)"
               ></tw-button>
+              }
             </div>
           </td>
         </tr>
