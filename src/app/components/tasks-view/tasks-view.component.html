@@ -67,8 +67,15 @@
 </main> -->
 
 @if(task){
+
 <main class="w-full h-full p-2">
-  <h2 class="max-lg:px-10 px-14 max-sm:px-6">{{ task.name }}</h2>
+  <div class="flex">
+    <i
+      class="bi bi-arrow-left-circle font-bold text-3xl cursor-pointer"
+      (click)="goBack()"
+    ></i>
+    <h2 class="max-lg:px-10 px-8 max-sm:px-6">{{ task.name }}</h2>
+  </div>
   <div class="flex max-lg:flex-col justify-center gap-2 pt-2">
     <div class="w-7/12 border rounded p-2 max-lg:w-11/12 max-lg:mx-auto">
       <label class="font-bold">Description</label>

@@ -30,7 +30,7 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
     this.today = new Date().toISOString();
   }
 
-  tasks!: I_TASK[];
+  tasks: I_TASK[] = [];
 
   users!: I_USER[];
 
@@ -176,6 +176,7 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
         this.inprogressTasks = res.data.filter(
           (task: I_TASK) => task.status === 'INPROGRESS'
         );
+        console.log(this.tasks.length);
       },
       (error: Error) => {
         console.log(error);

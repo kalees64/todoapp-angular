@@ -423,7 +423,7 @@
 
               <a
                 routerLink="/tasks/edit/{{ task.id }}"
-                class="sp-btn-success no-underline"
+                class="btn-blue no-underline"
                 >Edit</a
               >
               @if(task.status === 'PENDING'){
@@ -474,5 +474,36 @@
       </tbody>
     </table>
     }
+    <div class="pt-10">
+      <table
+        id="table"
+        *ngIf="tasks.length == 0"
+        class="w-screen table-t table-auto border overflow-x-scroll max-xl:text-sm table-hover-t"
+      >
+        <thead>
+          <tr class="border bg-gray-800 text-white">
+            <th class="border border-black p-1 px-2 text-start">Sno</th>
+            <th class="border border-black p-1 px-2 text-start">Task Name</th>
+            <!-- <th class="border border-black p-1 px-2 text-start">Description</th> -->
+            <!-- <th class="border border-black p-1 px-2 text-start">Priority</th> -->
+            <!-- <th class="border border-black p-1 px-2 text-start">Due Date</th> -->
+            <th class="border border-black p-1 px-2 text-start">Assigned To</th>
+            <th class="border border-black p-1 px-2 text-start">Status</th>
+            <th class="border border-black p-1 px-2 text-start">
+              Assigned Date
+            </th>
+            <th class="border border-black p-1 px-2 text-start">
+              Completed Date
+            </th>
+            <th class="border border-black p-1 px-2 text-start">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No Data Found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>
