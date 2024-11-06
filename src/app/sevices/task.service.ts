@@ -41,7 +41,7 @@ export class TaskService {
     return this.http.post(url, task);
   }
 
-  updateTask(id: number, task: I_UPDATE_TASK) {
+  updateTask(id: number, task: any) {
     const url = `${this.serverURL}/tasks/${id}`;
     return this.http.patch(url, task);
   }

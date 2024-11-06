@@ -40,6 +40,8 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
 
   pendingTasks!: I_TASK[];
 
+  inprogressTasks!: I_TASK[];
+
   user!: I_USER;
 
   addForm!: FormGroup;
@@ -96,6 +98,24 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
     }
   }
 
+  selectedStatus: string = 'all';
+
+  filter() {
+    if (this.selectedStatus === 'all') {
+      this.tasks = [];
+      this.fetchTasks();
+    } else if (this.selectedStatus === 'fixed') {
+      this.tasks = [];
+      this.fetchFixedTasks();
+    } else if (this.selectedStatus === 'pending') {
+      this.tasks = [];
+      this.fetchPendingTasks();
+    } else if (this.selectedStatus === 'closed') {
+      this.tasks = [];
+      this.fetchClosedTasks();
+    }
+  }
+
   fetchTasks() {
     this.taskService.getTasksWithCreater().subscribe(
       (res: any) => {
@@ -106,6 +126,78 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
         );
         this.pendingTasks = res.data.filter(
           (task: I_TASK) => task.status === 'PENDING'
+        );
+        this.inprogressTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'INPROGRESS'
+        );
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  fetchFixedTasks() {
+    this.taskService.getTasksWithCreater().subscribe(
+      (res: any) => {
+        this.tasks = res.data.filter(
+          (task: I_TASK) => task.status === 'INPROGRESS'
+        );
+        this.groupByWeek(res.data);
+        this.completedTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'COMPLETED'
+        );
+        this.pendingTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'PENDING'
+        );
+        this.inprogressTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'INPROGRESS'
+        );
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  fetchClosedTasks() {
+    this.taskService.getTasksWithCreater().subscribe(
+      (res: any) => {
+        this.tasks = res.data.filter(
+          (task: I_TASK) => task.status === 'COMPLETED'
+        );
+        this.groupByWeek(res.data);
+        this.completedTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'COMPLETED'
+        );
+        this.pendingTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'PENDING'
+        );
+        this.inprogressTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'INPROGRESS'
+        );
+      },
+      (error: Error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  fetchPendingTasks() {
+    this.taskService.getTasksWithCreater().subscribe(
+      (res: any) => {
+        this.tasks = res.data.filter(
+          (task: I_TASK) => task.status === 'PENDING'
+        );
+        this.groupByWeek(res.data);
+        this.completedTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'COMPLETED'
+        );
+        this.pendingTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'PENDING'
+        );
+        this.inprogressTasks = res.data.filter(
+          (task: I_TASK) => task.status === 'INPROGRESS'
         );
       },
       (error: Error) => {

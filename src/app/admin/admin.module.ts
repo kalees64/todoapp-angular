@@ -7,7 +7,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 import { AdminSidebarComponent } from './admin-sidebar/admin-sidebar.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import {
   ButtonComponent,
@@ -31,6 +31,7 @@ import {
     QuillModule,
     ButtonComponent,
     CardComponent,
+    FormsModule,
   ],
 })
 export class AdminModule {}

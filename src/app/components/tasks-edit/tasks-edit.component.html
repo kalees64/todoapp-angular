@@ -75,7 +75,7 @@
       ></quill-editor>
     </div>
 
-    <div>
+    <!-- <div>
       <label for="priority" class="form-label">Priority</label>
       <select
         name="priority"
@@ -92,9 +92,9 @@
         <option value="MEDIUM">MEDIUM</option>
         <option value="HIGH">HIGH</option>
       </select>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       <label for="dueDate" class="form-label">Due Date</label>
       <input
         type="date"
@@ -107,7 +107,7 @@
         class="form-input"
         formControlName="due_date"
       />
-    </div>
+    </div> -->
 
     <div>
       <label for="assignedTo" class="form-label"
@@ -137,6 +137,32 @@
       <span class="text-red-500">Task assigned_to required</span>
 
       } }
+    </div>
+
+    <div>
+      <label for="attachment" class="form-label">Attachment</label>
+      @if(imgURL){ @if(imgState){
+      <img src="{{ imgURL }}" alt="Image" />
+      <button type="button" class="sp-btn-danger mt-2" (click)="removeImage()">
+        Remove
+      </button>
+      } @else{
+      <input
+        type="file"
+        name="attachment"
+        id="attachment"
+        class="form-input"
+        (change)="onUpload($event)"
+      />
+      } } @else{
+      <input
+        type="file"
+        name="attachment"
+        id="attachment"
+        class="form-input"
+        (change)="onUpload($event)"
+      />
+      }
     </div>
 
     <div class="pt-2 d-flex justify-content-center">

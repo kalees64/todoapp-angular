@@ -40,11 +40,11 @@ export const routes: Routes = [
         component: TasksViewComponent,
         canActivate: [authGuard],
       },
-      // {
-      //   path: 'edit/:id',
-      //   component: TasksEditComponent,
-      //   canActivate: [authGuard],
-      // },
+      {
+        path: 'edit/:id',
+        component: TasksEditComponent,
+        canActivate: [authGuard],
+      },
     ],
   },
   {
