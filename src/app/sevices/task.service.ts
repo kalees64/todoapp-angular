@@ -52,12 +52,12 @@ export class TaskService {
   }
 
   uploadImage(image: any) {
-    const url = `https://cms.krudraksha.com/files`;
+    const url = `${environment.API_URL_FILES}`;
     return this.http.post(url, image);
   }
 
   getImage(id: string) {
-    const url = `https://cms.krudraksha.com/assets/${id}`;
+    const url = `${environment.API_URL_ASSETS}/${id}`;
     return this.http.get(url, { responseType: 'blob' });
   }
 }

@@ -19,35 +19,30 @@ export class TasksViewComponent implements OnInit {
     private taskService: TaskService,
     private location: Location,
     private toast: ToastrService
-  ) {
-    this.img = Math.floor(Math.random() * 4);
-    console.log(this.img);
-    if (this.img === 0) {
-      this.img = 1;
-    }
-  }
+  ) {}
 
   id!: number;
 
   task!: I_TASK;
-
-  img: number = 1;
 
   imgURL: any;
 
   fetchTask() {
     this.taskService.getTaskBtIdWithCreator(this.id).subscribe(
       (res: any) => {
-        this.taskService.getImage(res.data.image).subscribe(
-          (res: any) => {
-            console.log(res);
-            const objectURL = URL.createObjectURL(res);
-            this.imgURL = objectURL;
-          },
-          (error: Error) => {
-            console.log(error);
-          }
-        );
+        if (res.data.image) {
+          this.taskService.getImage(res.data.image).subscribe(
+            (res: any) => {
+              console.log(res);
+              const objectURL = URL.createObjectURL(res);
+              this.imgURL = objectURL;
+            },
+            (error: Error) => {
+              console.log(error);
+            }
+          );
+        }
+
         this.task = res.data;
       },
       (error: Error) => {

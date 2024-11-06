@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { TaskService } from '../../sevices/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { Config } from 'datatables.net';
@@ -7,13 +13,14 @@ import Swal from 'sweetalert2';
 import { UserService } from '../../sevices/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { I_USER } from '../register/user.model';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-tasks-list-all',
   templateUrl: './tasks-list-all.component.html',
   styles: ``,
 })
-export class TasksListAllComponent implements OnInit {
+export class TasksListAllComponent implements OnInit, AfterViewInit {
   constructor(
     private taskService: TaskService,
     private toast: ToastrService,
@@ -64,6 +71,29 @@ export class TasksListAllComponent implements OnInit {
 
   stopLoading() {
     this.isLoading = false;
+  }
+
+  @ViewChild('exampleModal') modalElement: any;
+
+  modalInstance: Modal | undefined;
+
+  ngAfterViewInit(): void {
+    // Initialize the modal instance after the view is initialized
+    this.modalInstance = new Modal(this.modalElement.nativeElement);
+  }
+
+  // Function to open the modal manually
+  openModal() {
+    if (this.modalInstance) {
+      this.modalInstance.show();
+    }
+  }
+
+  // Function to close the modal manually
+  closeModal() {
+    if (this.modalInstance) {
+      this.modalInstance.hide();
+    }
   }
 
   fetchTasks() {
@@ -220,39 +250,60 @@ export class TasksListAllComponent implements OnInit {
 
     this.startLoading();
 
-    this.taskService.uploadImage(formData).subscribe(
-      (res: any) => {
-        console.log(res);
-        const newTask = {
-          ...this.addForm.value,
-          created_by: userId,
-          completed_date: null,
-          assigned_date: new Date().toISOString(),
-          created_at: new Date().toISOString(),
-          modified_at: new Date().toISOString(),
-          assigned_to: Number(this.addForm.value['assigned_to']),
-          image: res.data.id,
-        };
-        console.log(newTask);
-        this.taskService.addTask(newTask).subscribe(
-          (res: any) => {
-            console.log(res.data);
-            this.stopLoading();
-            this.toast.success('Task Added');
-            this.ngOnInit();
-            this.reloadTable();
-          },
-          (error: Error) => {
-            console.log(error);
-            this.stopLoading();
-            this.toast.error(error.message);
-          }
-        );
-      },
-      (error: Error) => {
-        console.log(error);
-      }
-    );
+    if (this.addForm.value['image'] !== null) {
+      this.taskService.uploadImage(formData).subscribe(
+        (res: any) => {
+          console.log(res);
+          const newTask = {
+            ...this.addForm.value,
+            created_by: userId,
+            completed_date: null,
+            assigned_date: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            modified_at: new Date().toISOString(),
+            assigned_to: Number(this.addForm.value['assigned_to']),
+            image: res.data.id,
+            // images: [1],
+          };
+          console.log(newTask);
+          this.taskService.addTask(newTask).subscribe(
+            (res: any) => {
+              console.log(res.data);
+              this.stopLoading();
+              this.toast.success('Task Added');
+              this.ngOnInit();
+              this.reloadTable();
+              this.closeModal();
+            },
+            (error: Error) => {
+              console.log(error);
+              this.stopLoading();
+              this.toast.error(error.message);
+            }
+          );
+        },
+        (error: Error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log(newTask);
+      this.taskService.addTask(newTask).subscribe(
+        (res: any) => {
+          console.log(res.data);
+          this.stopLoading();
+          this.toast.success('Task Added');
+          this.ngOnInit();
+          this.reloadTable();
+          this.closeModal();
+        },
+        (error: Error) => {
+          console.log(error);
+          this.stopLoading();
+          this.toast.error(error.message);
+        }
+      );
+    }
 
     // console.log(formData);
   }

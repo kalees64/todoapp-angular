@@ -17,8 +17,8 @@
     <tw-button
       label="Create Task"
       variant="primary"
-      data-bs-toggle="modal"
       data-bs-target="#exampleModal"
+      (onBtnClick)="openModal()"
     ></tw-button>
   </div>
 
@@ -29,6 +29,7 @@
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    #exampleModal
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -95,11 +96,12 @@
             </div>
 
             <div>
-              <label for="image">Attachments</label>
+              <label for="image" class="form-label">Attachments</label>
               <input
                 type="file"
                 name="image"
                 id="image"
+                class="form-input p-10"
                 (change)="onUpload($event)"
               />
             </div>
@@ -213,8 +215,8 @@
                 <tw-button
                   label="Close"
                   type="button"
-                  data-bs-dismiss="modal"
                   variant="danger"
+                  (onBtnClick)="closeModal()"
                 ></tw-button>
               </div>
             </div>

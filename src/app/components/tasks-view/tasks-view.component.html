@@ -73,10 +73,13 @@
     <div class="w-7/12 border rounded p-2 max-lg:w-11/12 max-lg:mx-auto">
       <label class="font-bold">Description</label>
       <hr />
-      <p [innerHTML]="task.description">{{ task.description }}</p>
-      <div>
+      @if(task.description){
+      <p [innerHTML]="task.description" class="pb-2">{{ task.description }}</p>
+      } @if(imgURL){
+      <div class="border p-2 rounded">
         <img src="{{ imgURL }}" alt="Image" />
       </div>
+      }
     </div>
     <div class="w-4/12 border p-2 rounded max-lg:w-11/12 max-lg:mx-auto">
       <div class="grid pb-1">
