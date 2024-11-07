@@ -14,6 +14,7 @@ import {
   BadgeComponent,
   CardComponent,
 } from '@kalees64/tw-theme';
+import { ImagePreviewPipe } from '../components/tasks-list-all/imagePreview.pipe';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {
     ButtonComponent,
     CardComponent,
     FormsModule,
+    ImagePreviewPipe,
   ],
 })
 export class AdminModule {}

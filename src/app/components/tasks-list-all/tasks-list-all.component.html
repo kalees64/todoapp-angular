@@ -97,13 +97,56 @@
 
             <div>
               <label for="image" class="form-label">Attachments</label>
-              <input
+              <!-- <input
                 type="file"
                 name="image"
                 id="image"
                 class="form-input p-10"
                 (change)="onUpload($event)"
-              />
+              /> -->
+
+              <div
+                class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center space-y-4"
+                (drop)="onDrop($event)"
+                (dragover)="onDragOver($event)"
+              >
+                <input
+                  #fileInput
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                />
+                <button
+                  class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  (click)="fileInput.click()"
+                  type="button"
+                >
+                  Select Image
+                </button>
+                <p class="text-gray-500 text-sm">
+                  or drag and drop an image here or paste an image here
+                </p>
+
+                <!-- Preview section -->
+                <div
+                  *ngIf="file"
+                  class="mt-4 relative flex flex-col items-center"
+                >
+                  <img
+                    [src]="file | imagePreview"
+                    alt="Preview"
+                    class="w-24 h-24 object-cover rounded"
+                  />
+                  <button
+                    class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs"
+                    (click)="removeFile()"
+                    type="button"
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- <div>

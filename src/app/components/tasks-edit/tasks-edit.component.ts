@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -14,11 +20,12 @@ import { QuillModule } from 'ngx-quill';
 import { CommonModule, Location } from '@angular/common';
 import { I_USER } from '../register/user.model';
 import Swal from 'sweetalert2';
+import { ImagePreviewPipe } from '../tasks-list-all/imagePreview.pipe';
 
 @Component({
   selector: 'app-tasks-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, QuillModule, CommonModule],
+  imports: [ReactiveFormsModule, QuillModule, CommonModule, ImagePreviewPipe],
   templateUrl: './tasks-edit.component.html',
   styles: ``,
 })
@@ -137,60 +144,72 @@ export class TasksEditComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.updateForm.get('image')?.value);
 
-    if (this.updateForm.value['image'] !== null && !this.imgState) {
-      this.taskService.uploadImage(formData).subscribe(
-        (res: any) => {
-          console.log(res);
-          this.newImage = res.data.id;
-          console.log(this.newImage);
+    if (
+      (this.file !== null || this.updateForm.value['image'] !== null) &&
+      !this.imgState
+    ) {
+      console.log('if');
+      if (this.file !== null) {
+        const formData = new FormData();
+        formData.append('file', this.file);
+        this.taskService.uploadImage(formData).subscribe(
+          (res: any) => {
+            console.log(res);
+            this.newImage = res.data.id;
+            console.log(this.newImage);
 
-          if (this.updateForm.value['status'] === 'COMPLETED') {
-            const updatedTask = {
-              ...this.updateForm.value,
-              modified_at: new Date().toISOString(),
-              completed_date: new Date().toISOString(),
-              image: this.newImage,
-            };
+            if (this.updateForm.value['status'] === 'COMPLETED') {
+              const updatedTask = {
+                ...this.updateForm.value,
+                modified_at: new Date().toISOString(),
+                completed_date: new Date().toISOString(),
+                image: this.newImage,
+              };
 
-            console.log(updatedTask);
+              console.log(updatedTask);
 
-            this.taskService.updateTask(this.id, updatedTask).subscribe(
-              (res: any) => {
-                console.log(res.data);
-                this.toast.success('Task Updated');
-                this.location.back();
-              },
-              (error: Error) => {
-                console.log(error);
-              }
-            );
-          } else {
-            const updatedTask = {
-              ...this.updateForm.value,
-              modified_at: new Date().toISOString(),
-              completed_date: null,
-              image: this.newImage,
-            };
+              this.taskService.updateTask(this.id, updatedTask).subscribe(
+                (res: any) => {
+                  console.log(res.data);
+                  this.toast.success('Task Updated');
+                  this.location.back();
+                },
+                (error: Error) => {
+                  console.log(error);
+                }
+              );
+            } else {
+              const updatedTask = {
+                ...this.updateForm.value,
+                modified_at: new Date().toISOString(),
+                completed_date: null,
+                image: this.newImage,
+              };
 
-            console.log(updatedTask);
+              console.log(updatedTask);
 
-            this.taskService.updateTask(this.id, updatedTask).subscribe(
-              (res: any) => {
-                console.log(res.data);
-                this.toast.success('Task Updated');
-                this.location.back();
-              },
-              (error: Error) => {
-                console.log(error);
-              }
-            );
+              this.taskService.updateTask(this.id, updatedTask).subscribe(
+                (res: any) => {
+                  console.log(res.data);
+                  this.toast.success('Task Updated');
+                  this.location.back();
+                },
+                (error: Error) => {
+                  console.log(error);
+                }
+              );
+            }
+          },
+          (error: Error) => {
+            console.log(error);
           }
-        },
-        (error: Error) => {
-          console.log(error);
-        }
-      );
-    } else if (this.updateForm.value['image'] === null && !this.imgState) {
+        );
+      }
+    } else if (
+      (this.file === null || this.updateForm.value['image'] === null) &&
+      !this.imgState
+    ) {
+      console.log('else if');
       if (this.updateForm.value['status'] === 'COMPLETED') {
         const updatedTask = {
           ...this.updateForm.value,
@@ -233,59 +252,153 @@ export class TasksEditComponent implements OnInit {
         );
       }
     } else {
-      this.taskService.uploadImage(formData).subscribe(
-        (res: any) => {
-          console.log(res);
-          this.newImage = res.data.id;
-          console.log(this.newImage);
+      console.log('else');
 
-          if (this.updateForm.value['status'] === 'COMPLETED') {
-            const updatedTask = {
-              ...this.updateForm.value,
-              modified_at: new Date().toISOString(),
-              completed_date: new Date().toISOString(),
-              image: this.newImage,
-            };
+      if (this.file === null && this.updateForm.value['image'] === null) {
+        if (this.updateForm.value['status'] === 'COMPLETED') {
+          const updatedTask = {
+            ...this.updateForm.value,
+            modified_at: new Date().toISOString(),
+            completed_date: new Date().toISOString(),
+            image: this.newImage,
+          };
 
-            console.log(updatedTask);
+          console.log(updatedTask);
 
-            this.taskService.updateTask(this.id, updatedTask).subscribe(
-              (res: any) => {
-                console.log(res.data);
-                this.toast.success('Task Updated');
-                this.location.back();
-              },
-              (error: Error) => {
-                console.log(error);
-              }
-            );
-          } else {
-            const updatedTask = {
-              ...this.updateForm.value,
-              modified_at: new Date().toISOString(),
-              completed_date: null,
-              image: this.newImage,
-            };
+          this.taskService.updateTask(this.id, updatedTask).subscribe(
+            (res: any) => {
+              console.log(res.data);
+              this.toast.success('Task Updated');
+              this.location.back();
+            },
+            (error: Error) => {
+              console.log(error);
+            }
+          );
+        } else {
+          const updatedTask = {
+            ...this.updateForm.value,
+            modified_at: new Date().toISOString(),
+            completed_date: null,
+            image: this.newImage,
+          };
 
-            console.log(updatedTask);
+          console.log(updatedTask);
 
-            this.taskService.updateTask(this.id, updatedTask).subscribe(
-              (res: any) => {
-                console.log(res.data);
-                this.toast.success('Task Updated');
-                this.location.back();
-              },
-              (error: Error) => {
-                console.log(error);
-              }
-            );
-          }
-        },
-        (error: Error) => {
-          console.log(error);
+          this.taskService.updateTask(this.id, updatedTask).subscribe(
+            (res: any) => {
+              console.log(res.data);
+              this.toast.success('Task Updated');
+              this.location.back();
+            },
+            (error: Error) => {
+              console.log(error);
+            }
+          );
         }
-      );
+      } else if (this.file !== null) {
+        const formData = new FormData();
+        formData.append('file', this.file);
+        this.taskService.uploadImage(formData).subscribe(
+          (res: any) => {
+            console.log(res);
+            this.newImage = res.data.id;
+            console.log(this.newImage);
+
+            if (this.updateForm.value['status'] === 'COMPLETED') {
+              const updatedTask = {
+                ...this.updateForm.value,
+                modified_at: new Date().toISOString(),
+                completed_date: new Date().toISOString(),
+                image: this.newImage,
+              };
+
+              console.log(updatedTask);
+
+              this.taskService.updateTask(this.id, updatedTask).subscribe(
+                (res: any) => {
+                  console.log(res.data);
+                  this.toast.success('Task Updated');
+                  this.location.back();
+                },
+                (error: Error) => {
+                  console.log(error);
+                }
+              );
+            } else {
+              const updatedTask = {
+                ...this.updateForm.value,
+                modified_at: new Date().toISOString(),
+                completed_date: null,
+                image: this.newImage,
+              };
+
+              console.log(updatedTask);
+
+              this.taskService.updateTask(this.id, updatedTask).subscribe(
+                (res: any) => {
+                  console.log(res.data);
+                  this.toast.success('Task Updated');
+                  this.location.back();
+                },
+                (error: Error) => {
+                  console.log(error);
+                }
+              );
+            }
+          },
+          (error: Error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        if (this.updateForm.value['status'] === 'COMPLETED') {
+          const updatedTask = {
+            ...this.updateForm.value,
+            modified_at: new Date().toISOString(),
+            completed_date: new Date().toISOString(),
+            image: this.updateForm.value['image'],
+          };
+
+          console.log(updatedTask);
+
+          this.taskService.updateTask(this.id, updatedTask).subscribe(
+            (res: any) => {
+              console.log(res.data);
+              this.toast.success('Task Updated');
+              this.location.back();
+            },
+            (error: Error) => {
+              console.log(error);
+            }
+          );
+        } else {
+          const updatedTask = {
+            ...this.updateForm.value,
+            modified_at: new Date().toISOString(),
+            completed_date: null,
+            image: this.updateForm.value['image'],
+          };
+
+          console.log(updatedTask);
+
+          this.taskService.updateTask(this.id, updatedTask).subscribe(
+            (res: any) => {
+              console.log(res.data);
+              this.toast.success('Task Updated');
+              this.location.back();
+            },
+            (error: Error) => {
+              console.log(error);
+            }
+          );
+        }
+      }
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   ngOnInit(): void {
@@ -341,5 +454,53 @@ export class TasksEditComponent implements OnInit {
 
   get description() {
     return this.updateForm.controls['description'];
+  }
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  file: File | null = null;
+
+  // Handle file selection
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const selectedFile = target.files ? target.files[0] : null;
+    if (selectedFile && selectedFile.type.startsWith('image')) {
+      this.file = selectedFile;
+    }
+  }
+
+  // Handle drag-and-drop
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer?.files) {
+      const droppedFile = event.dataTransfer.files[0];
+      if (droppedFile.type.startsWith('image')) {
+        this.file = droppedFile;
+      }
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  // Handle paste event
+  @HostListener('window:paste', ['$event'])
+  onPaste(event: ClipboardEvent): void {
+    const items = event.clipboardData?.items;
+    if (items) {
+      const imageFiles = Array.from(items)
+        .filter((item) => item.type.startsWith('image'))
+        .map((item) => item.getAsFile())
+        .filter((file) => file) as File[];
+
+      if (imageFiles.length > 0) {
+        this.file = imageFiles[0]; // Take the first image file, since it's single file input
+      }
+    }
+  }
+
+  // Remove the file
+  removeFile(): void {
+    this.file = null;
   }
 }

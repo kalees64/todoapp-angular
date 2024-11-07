@@ -1,11 +1,17 @@
 <main class="p-2 grid justify-center">
   <form
     method="post"
-    class="w-96 max-sm:w-11/12 mx-auto"
+    class="w-11/12 mx-auto"
     [formGroup]="updateForm"
     (ngSubmit)="onSubmit()"
   >
-    <h2 class="text-3xl font-bold">Update Task</h2>
+    <div class="flex gap-2 items-center">
+      <i
+        class="bi bi-arrow-left-circle font-bold text-3xl cursor-pointer"
+        (click)="goBack()"
+      ></i>
+      <h2 class="text-3xl font-bold">Update Task</h2>
+    </div>
 
     <div>
       <label for="taskName" class="form-label"
@@ -147,21 +153,101 @@
         Remove
       </button>
       } @else{
-      <input
+      <!-- <input
         type="file"
         name="attachment"
         id="attachment"
         class="form-input"
         (change)="onUpload($event)"
-      />
+      /> -->
+
+      <div
+        class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center space-y-4"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          class="hidden"
+          (change)="onFileSelected($event)"
+        />
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          (click)="fileInput.click()"
+          type="button"
+        >
+          Select Image
+        </button>
+        <p class="text-gray-500 text-sm">
+          or drag and drop an image here or paste an image here
+        </p>
+
+        <!-- Preview section -->
+        <div *ngIf="file" class="mt-4 relative flex flex-col items-center">
+          <img
+            [src]="file | imagePreview"
+            alt="Preview"
+            class="w-24 h-24 object-cover rounded"
+          />
+          <button
+            class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs"
+            (click)="removeFile()"
+            type="button"
+          >
+            X
+          </button>
+        </div>
+      </div>
       } } @else{
-      <input
+      <!-- <input
         type="file"
         name="attachment"
         id="attachment"
         class="form-input"
         (change)="onUpload($event)"
-      />
+      /> -->
+
+      <div
+        class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center space-y-4"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          class="hidden"
+          (change)="onFileSelected($event)"
+        />
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          (click)="fileInput.click()"
+          type="button"
+        >
+          Select Image
+        </button>
+        <p class="text-gray-500 text-sm">
+          or drag and drop an image here or paste an image here
+        </p>
+
+        <!-- Preview section -->
+        <div *ngIf="file" class="mt-4 relative flex flex-col items-center">
+          <img
+            [src]="file | imagePreview"
+            alt="Preview"
+            class="w-24 h-24 object-cover rounded"
+          />
+          <button
+            class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs"
+            (click)="removeFile()"
+            type="button"
+          >
+            X
+          </button>
+        </div>
+      </div>
       }
     </div>
 

@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -338,12 +339,19 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
     };
     // console.log(newTask);
 
-    const formData = new FormData();
-    formData.append('file', this.addForm.get('image')?.value);
+    console.log(this.file);
 
-    this.startLoading();
+    if (this.file !== null) {
+      const formData = new FormData();
+      // formData.append('file', this.addForm.get('image')?.value);
+      formData.append('file', this.file);
+    }
 
-    if (this.addForm.value['image'] !== null) {
+    // this.startLoading();
+
+    if (this.file !== null) {
+      const formData = new FormData();
+      formData.append('file', this.file);
       this.taskService.uploadImage(formData).subscribe(
         (res: any) => {
           console.log(res);
@@ -499,5 +507,53 @@ export class TasksListAllComponent implements OnInit, AfterViewInit {
 
   get assigned_to() {
     return this.addForm.controls['assigned_to'];
+  }
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  file: File | null = null;
+
+  // Handle file selection
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const selectedFile = target.files ? target.files[0] : null;
+    if (selectedFile && selectedFile.type.startsWith('image')) {
+      this.file = selectedFile;
+    }
+  }
+
+  // Handle drag-and-drop
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer?.files) {
+      const droppedFile = event.dataTransfer.files[0];
+      if (droppedFile.type.startsWith('image')) {
+        this.file = droppedFile;
+      }
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  // Handle paste event
+  @HostListener('window:paste', ['$event'])
+  onPaste(event: ClipboardEvent): void {
+    const items = event.clipboardData?.items;
+    if (items) {
+      const imageFiles = Array.from(items)
+        .filter((item) => item.type.startsWith('image'))
+        .map((item) => item.getAsFile())
+        .filter((file) => file) as File[];
+
+      if (imageFiles.length > 0) {
+        this.file = imageFiles[0]; // Take the first image file, since it's single file input
+      }
+    }
+  }
+
+  // Remove the file
+  removeFile(): void {
+    this.file = null;
   }
 }
